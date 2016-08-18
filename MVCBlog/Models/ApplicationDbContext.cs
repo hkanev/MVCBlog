@@ -23,6 +23,7 @@ namespace MVC_Blog.Models
         public System.Data.Entity.DbSet<MVC_Blog.Models.Post> Posts { get; set; }
 
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         public IEnumerable ApplicationUsers { get; internal set; }
     }
 }
