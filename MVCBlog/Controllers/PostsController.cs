@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using MVCBlog.Models;
 using MVC_Blog.Models;
 using SimpleForum.Extensions;
 
@@ -51,10 +52,20 @@ namespace SimpleForum.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Create([Bind(Include = "Id,Title,Body,Date")] Post post)
+        public ActionResult Create([Bind(Include = "Id,Title,Body,Date")] Post post, int? id)
         {
             if (ModelState.IsValid)
             {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Category category = db.Categories.Find(id);
+                if (post == null)
+                {
+                    return HttpNotFound();
+                }
+                post.Category = category;
                 post.Author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
                 db.Posts.Add(post);
                 db.SaveChanges();

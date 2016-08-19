@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using MVCBlog.Models;
 using SimpleForum.Models;
 
 namespace MVC_Blog.Models
@@ -36,6 +37,7 @@ namespace MVC_Blog.Models
 
         [ForeignKey("Author_Id")]
         public ApplicationUser Author { get; set; }
+        public Category Category { get; set; }
 
         public virtual ICollection<Tag> Tags { get; set; }
 

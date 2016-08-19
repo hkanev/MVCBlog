@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using MVCBlog.Models;
 using SimpleForum.Models;
 
 namespace MVC_Blog.Models
@@ -24,6 +25,8 @@ namespace MVC_Blog.Models
 
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Category> Categories { get; set; }
         public IEnumerable ApplicationUsers { get; internal set; }
+
     }
 }
