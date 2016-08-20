@@ -1,31 +1,38 @@
-﻿@model MVCBlog.Models.Category
+﻿@using MVCBlog.Models
+@model MVCBlog.Models.Category
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h4>Category</h4>
+<hr/>
+@foreach (var post in Model.Posts)
+{
+    <div class="row">
+        <div class="post col-md-10">
 
-<div>
-    <h4>Category</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        @foreach (var post in Model.Posts)
-        {
-            <dd>
-                @Html.ActionLink(post.Title, "Details", "Posts", new { id = post.Id }, null)
-            </dd>
-        }
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+            <div class="post-header">
+                <div>
+                    @Html.ActionLink(post.Title, "Details", "Posts", new {id = post.Id}, null)
+                </div>
+               
+                <div>
+                    <span>
+                       Anonnymous
+                     @*TODO: Fix author*@  
+                    </span>
+                    <span>@Html.DisplayFor(modelItem => post.Date)</span>
+                    <span>@Html.ActionLink(Model.Name, "Details", "Category", new { id = Model.Id }, null)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+
+

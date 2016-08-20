@@ -17,7 +17,7 @@ namespace MVCBlog.Controllers
 
         // GET: Comments
         public ActionResult Index()
-        {
+        {   
             var comments = db.Comments.Include(c => c.Post);
             return View(comments.ToList());
         }
@@ -25,6 +25,8 @@ namespace MVCBlog.Controllers
         // GET: Comments/Details/5
         public ActionResult Details(int? id)
         {
+            var authors = db.Posts.Include(p => p.Author);
+            ViewBag.Authors = authors;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

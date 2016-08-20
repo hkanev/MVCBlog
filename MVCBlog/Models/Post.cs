@@ -33,9 +33,9 @@ namespace MVC_Blog.Models
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
+        [ForeignKey("Author")]
         public string Author_Id { get; set; }
 
-        [ForeignKey("Author_Id")]
         public ApplicationUser Author { get; set; }
         public Category Category { get; set; }
 

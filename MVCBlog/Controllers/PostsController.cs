@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using MVCBlog.Models;
 using MVC_Blog.Models;
 using SimpleForum.Extensions;
+using Microsoft.AspNet.Identity;
 
 namespace SimpleForum.Controllers
 {

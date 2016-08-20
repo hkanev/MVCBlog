@@ -9,36 +9,48 @@
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("MVC Blog", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Posts", "Index", "Posts")</li>
-                    <li>@Html.ActionLink("New Post", "Create", "Posts")</li>
-                    <li>@Html.ActionLink("New Comment", "Create", "Comments")</li>
-                    <li>@Html.ActionLink("Category", "Index", "Category")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
+<div class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("MVC Blog", "Index", "Home", new {area = ""}, new {@class = "navbar-brand"})
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                <li>@Html.ActionLink("Posts", "Index", "Posts")</li>
+                <li>@Html.ActionLink("New Post", "Create", "Posts")</li>
+                <li>@Html.ActionLink("New Comment", "Create", "Comments")</li>
+                <li>@Html.ActionLink("Category", "Index", "Category")</li>
+            </ul>
+            @Html.Partial("_LoginPartial")
         </div>
     </div>
-    <div class="container body-content">
+</div>
+<div class="row">
+    <div class="sideBar col-md-2">
+        <ul>
+            <li>@Html.ActionLink("Home", "Index", "Home")</li>
+            <li>@Html.ActionLink("Posts", "Index", "Posts")</li>
+            <li>@Html.ActionLink("New Post", "Create", "Posts")</li>
+            <li>@Html.ActionLink("New Comment", "Create", "Comments")</li>
+            <li>@Html.ActionLink("Category", "Index", "Category")</li>
+        </ul>
+    </div>
+    <div class="container body-content col-md-10">
+
         @Html.Partial("_Notifications")
         @RenderBody()
-        <hr />
+        <hr/>
         <footer>
             <p>&copy; @DateTime.Now.Year - MVC Blog</p>
         </footer>
     </div>
+</div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
