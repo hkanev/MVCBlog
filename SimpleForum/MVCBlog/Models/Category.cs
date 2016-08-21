@@ -11,6 +11,11 @@ namespace SimpleForum.Models
     {
         public Category()
         {
+            
+        }
+        public Category(string name)
+        {
+            this.Name = name;
             this.Posts = new HashSet<Post>();
         }
 

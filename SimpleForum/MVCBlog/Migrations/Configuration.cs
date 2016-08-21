@@ -36,17 +36,17 @@ namespace SimpleForum.Migrations
 
                 var tagList = new List<Tag>();
 
-                var tag1 = new Tag();
-                tag1.Name = "Java";
+                var tag1 = new Tag {Name = "Java"};
                 tagList.Add(tag1);
 
-                var tag2 = new Tag();
-                tag2.Name = "PHP";
+                var tag2 = new Tag {Name = "PHP"};
                 tagList.Add(tag2);
 
-                var tag3 = new Tag();
-                tag3.Name = "C#";
+                var tag3 = new Tag {Name = "C#"};
                 tagList.Add(tag3);
+
+                var category1 = new Category("Others");
+                var category2 = new Category("Programming");
 
                
 
@@ -67,7 +67,8 @@ namespace SimpleForum.Migrations
                     {
                         new Comment(1, "First comment", context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
                         new Comment(1, "Second comment")
-                    }
+                    },
+                    category: category2
                 );
 
                 CreatePost(context,
@@ -86,7 +87,8 @@ namespace SimpleForum.Migrations
                     {
                         new Comment(2, "First windows comment", context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
                         new Comment(2, "Second windows comment")
-                    }
+                    },
+                    category: category2
                );
 
                 CreatePost(context,
@@ -96,7 +98,7 @@ namespace SimpleForum.Migrations
                     <p>GitHub has also released a beta preview of Atom 1.8.</p>",
                    date: new DateTime(2016, 03, 27, 17, 53, 48),
                    authorUsername: "merry@gmail.com",
-                     description: ">GitHub has released <b>Atom 1.7</b>, and the updated version of the text editor offers improvements for Windows developers. Specifically, it is now easier to build in Visual Studio," +
+                     description: "GitHub has released <b>Atom 1.7</b>, and the updated version of the text editor offers improvements for Windows developers. Specifically, it is now easier to build in Visual Studio," +
                                   "and it now supports the Appveyor CI continuous integration service for Windows.",
                     tag: new List<Tag>()
                     {
@@ -107,7 +109,8 @@ namespace SimpleForum.Migrations
                     {
                         new Comment(3, "First GitHub comment", context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
                         new Comment(3, "Second GitHub comment")
-                    }
+                    },
+                    category: category2
                );
 
                 CreatePost(context,
@@ -133,7 +136,8 @@ namespace SimpleForum.Migrations
                     {
                         new Comment(4, "First SoftUni comment", context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
                         new Comment(4, "Second SoftUni comment")
-                    }
+                    },
+                    category: category1
                );
 
                 CreatePost(context,
@@ -160,7 +164,8 @@ namespace SimpleForum.Migrations
                     {
                         new Comment(1, "First Git comment", context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
                         new Comment(1, "Second Git comment")
-                    }
+                    },
+                    category: category1
                 );
 
                 CreatePost(context,
@@ -182,7 +187,8 @@ namespace SimpleForum.Migrations
                     {
                         new Comment(1, "First Rogue comment", context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
                         new Comment(1, "Second Rogue comment")
-                    }
+                    }, 
+                    category: category1
                );
 
 
@@ -242,7 +248,7 @@ namespace SimpleForum.Migrations
         }
 
         private void CreatePost(ApplicationDbContext context,
-            string title, string body, DateTime date, string authorUsername, string description, List<Tag> tag, List<Comment> comment)
+            string title, string body, DateTime date, string authorUsername, string description, List<Tag> tag, List<Comment> comment,Category category)
         {
             var post = new Post();
             post.Title = title;
@@ -252,6 +258,7 @@ namespace SimpleForum.Migrations
             post.Description = description;
             post.Tags = tag;
             post.Comment = comment;
+            post.Category = category;
             context.Posts.Add(post);
         }
 

@@ -52,7 +52,7 @@ namespace SimpleForum.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Content,PostId")] Comment comment, int? id)
+        public ActionResult Create([Bind(Include = "Id,Content,PostId,Date")] Comment comment, int? id)
         {
             if (id == null)
             {
@@ -67,6 +67,7 @@ namespace SimpleForum.Controllers
             if (ModelState.IsValid)
             {
                 comment.Post = post;
+                comment.Author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
                 db.Comments.Add(comment);
                 db.SaveChanges();
                 return RedirectToAction("Index");

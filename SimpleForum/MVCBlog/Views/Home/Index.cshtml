@@ -1,33 +1,35 @@
-﻿@model IEnumerable<SimpleForum.Models.Post>
-@{
-    ViewBag.Title = "Home Page";
-}
-<hr/>
-<h2>MvcBlog</h2>
-<hr/>
+﻿@using MVCBlog.Models
+@using SimpleForum.Models
+@model MVCBlog.Models.HomeView
+ 
+<hr />
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+</ol>
+<hr />
 <section id="blog" class="container-fluid">
     <div class="blog">
         <div class="row">
             <div class="col-md-8">
-                @foreach (var post in Model)
+                @foreach (var post in Model.Posts)
                 {
                     <div class="blog-item">
                         <div class="row">
                             <div class="col-xs-12 col-sm-2 text-center">
                                 <div class="entry-meta">
                                     <span id="publish_date">@post.Date.ToString("dd MMM")</span>
-                                    <span><i class="fa fa-user"></i> 
-                                    @if (post.Author != null)
-                                    {
-                                       @: <a href="#">@post.Author.FullName</a> 
+                                    <span>
+                                        @if (post.Author != null)
+                                        {
+                                            @: <a href="#">@post.Author.FullName</a>
                                     }
-                                    else
-                                    {
-                                        @: <a href="#">Annonymous</a> 
+                                        else
+                                        {
+                                            @: <a href="#">Annonymous</a>
                                     }
                                     </span>
-                                    <span><i class="fa fa-comment"></i> <a href="#">@post.Comment.Count Comments</a></span>
-                                    <span><i class="fa fa-heart"></i><a href="#">56 Likes</a></span>
+                                    <span><a href="#">@post.Comment.Count Comments</a></span>
+                                    <span><a href="#">56 Likes</a></span>
                                 </div>
                             </div>
 
@@ -41,7 +43,7 @@
                     </div>
                     <!--/.blog-item-->
                 }
-                
+
 
                 <ul class="pagination pagination-lg">
                     <li><a href="#"><i class="fa fa-long-arrow-left"></i>Previous Page</a></li>
@@ -60,27 +62,26 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="single_comments">
-                                <img src="images/blog/avatar3.png" alt="" />
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do </p>
-                                <div class="entry-meta small muted">
-                                    <span>By <a href="#">Alex</a></span><span>On <a href="#">Creative</a></span>
-                                </div>
+                                @foreach (var comment in Model.Comments)
+                                {
+                                    <img src="~/Content/avatar3.png" />
+                                    @Utils.CutText(comment.Content,35)
+                                    <div class="entry-meta small muted">
+                                        <span>
+                                            By <a href="#">
+                                                @if (comment.Author != null)
+                                                {
+                                                    @comment.Author.FullName;
+                                                }
+                                                else
+                                                {
+                                                    @:Anonnymous
+                                                }
+                                            </a>
+                                        </span><span>On <a href="#">@Utils.CutText(comment.Post.Title,25)</a></span>
+                                    </div>
+                                }
                             </div>
-                            <div class="single_comments">
-                                <img src="images/blog/avatar3.png" alt="" />
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do </p>
-                                <div class="entry-meta small muted">
-                                    <span>By <a href="#">Alex</a></span><span>On <a href="#">Creative</a></span>
-                                </div>
-                            </div>
-                            <div class="single_comments">
-                                <img src="images/blog/avatar3.png" alt="" />
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do </p>
-                                <div class="entry-meta small muted">
-                                    <span>By <a href="#">Alex</a></span><span>On <a href="#">Creative</a></span>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                 </div><!--/.recent comments-->
@@ -90,10 +91,10 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <ul class="blog_category">
-                                <li><a href="#">Computers <span class="badge">04</span></a></li>
-                                <li><a href="#">Smartphone <span class="badge">10</span></a></li>
-                                <li><a href="#">Gedgets <span class="badge">06</span></a></li>
-                                <li><a href="#">Technology <span class="badge">25</span></a></li>
+                                @foreach (var category in Model.Categories)
+                                {
+                                    <li><a href="#">@category.Name<span class="badge">@category.Posts.Count</span></a></li>
+                                }
                             </ul>
                         </div>
                     </div>
