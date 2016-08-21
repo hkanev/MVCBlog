@@ -34,7 +34,7 @@
                             <div class="col-xs-12 col-sm-10 blog-content">
 
                                 <h2>@Html.ActionLink(post.Title, "Details", "Posts", new { id = post.Id }, null)</h2>
-                                <h3>@Html.Raw(post.Body)</h3>
+                                <h3>@Html.Raw(post.Description)</h3>
                                 @*<a class="btn btn-primary readmore" href="blog-item.html">Read More <i class="fa fa-angle-right"></i></a>*@
                             </div>
                         </div>

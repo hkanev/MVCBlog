@@ -11,6 +11,13 @@ namespace SimpleForum.Models
     {
         public Comment()
         {
+            
+        }
+        public Comment(int postId, string content, ApplicationUser author = null)
+        {
+            this.PostId = postId;
+            this.Content = content;
+            this.Author = author;
             this.Posts = new HashSet<Post>();
         }
         public int Id { get; set; }
@@ -22,7 +29,7 @@ namespace SimpleForum.Models
 
         public virtual Post Post { get; set; }
 
-        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationUser Author { get; set; }
 
         public virtual ICollection<Post> Posts { get; set; }
     }

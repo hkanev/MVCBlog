@@ -10,6 +10,11 @@ namespace SimpleForum.Models
     {
         public Tag()
         {
+            
+        }
+        public Tag(string name)
+        {
+            this.Name = name;
             this.Posts = new HashSet<Post>();
         }
         

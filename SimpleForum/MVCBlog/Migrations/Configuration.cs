@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.ComponentModel;
+using Microsoft.Ajax.Utilities;
 
 namespace SimpleForum.Migrations
 {
@@ -19,6 +21,7 @@ namespace SimpleForum.Migrations
 
         protected override void Seed(ApplicationDbContext context)
         {
+
             if (!context.Users.Any())
             {
                 // If the database is empty, populate sample data in it
@@ -30,55 +33,161 @@ namespace SimpleForum.Migrations
 
                 CreateRole(context, "Administrators");
                 AddUserToRole(context, "admin@gmail.com", "Administrators");
-            }
 
-            var tagList = new List<Tag>();
-            if (!context.Tags.Any())
-            {
-                for (int i = 1; i < 21; i++)
-                {
-                    var tag = new Tag() {Name = $"tag {i}"};
-                    context.Tags.Add(tag);
-                    tagList.Add(tag);
-                }
-            }
-            if (!context.Posts.Any())
-            {
-                var tagIndex = 0;
-                for (int i = 1; i < 21; i++)
-                {
-                    var post = new Post() {Body = $"Body content {i}", Title = $"Post title {i}"};
-                    for (int j = 0; j < 5; j++)
+                var tagList = new List<Tag>();
+
+                var tag1 = new Tag();
+                tag1.Name = "Java";
+                tagList.Add(tag1);
+
+                var tag2 = new Tag();
+                tag2.Name = "PHP";
+                tagList.Add(tag2);
+
+                var tag3 = new Tag();
+                tag3.Name = "C#";
+                tagList.Add(tag3);
+
+               
+
+                CreatePost(context,
+                    title: "Work Begins on HTML5.1",
+                    body: @"<p>The World Wide Web Consortium (W3C) has begun work on <b>HTML5.1</b>, and this time it is handling the creation of the standard a little differently. The specification has its <b><a href=""https://w3c.github.io/html/"">own GitHub project</a></b> where anyone can see what is happening and propose changes.</p>
+                    <p>The organization says the goal for the new specification is ""to <b>match reality better</b>, to make the specification as clear as possible to readers, and of course to make it possible for all stakeholders to propose improvements, and understand what makes changes to HTML successful.""</p>
+                    <p>Creating HTML5 took years, but W3C hopes using GitHub will speed up the process this time around. It plans to release a candidate recommendation for HTML5.1 by <b>June</b> and a full recommendation in <b>September</b>.</p>",
+                    date: new DateTime(2016, 03, 27, 17, 53, 48),
+                    authorUsername: "merry@gmail.com",
+                    description: "The World Wide Web Consortium (W3C) has begun work on <b>HTML5.1 , and this time it is handling the creation of the standard a little differently.",
+                    tag: new List<Tag>()
                     {
-                        post.Tags.Add(tagList[tagIndex%tagList.Count]);
-                        tagIndex++;
+                        new Tag("HTML5"),
+                        new Tag("Programming")
+                    }, 
+                    comment: new List<Comment>()
+                    {
+                        new Comment(1, "First comment", context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
+                        new Comment(1, "Second comment")
                     }
-                    context.Posts.Add(post);
-                }
-            }
+                );
 
-            if (!context.Categories.Any())
-            {
-                for (int i = 1; i < 21; i++)
-                {
-                    var category = new Category() { Name = $"category {i}" };
-                    context.Categories.Add(category);
-                }
-            }
-        
+                CreatePost(context,
+                   title: "Windows 10 Preview with Bash Support Now Available",
+                   body: @"<p>Microsoft has released a new <b>Windows 10 Insider Preview</b> that includes native support for <b>Bash running on Ubuntu Linux</b>. The company first announced the new feature at last week''s Build development conference, and it was one of the biggest stories of the event. The current process for installing Bash is a little complication, but Microsoft has a blog post that explains how the process works.</p>
+                    <p>The preview build also includes <b>Cortana</b> upgrades, extensions support, the new <b>Skype</b> Universal Windows Platform app and some interface improvements.</p>",
+                   date: new DateTime(2016, 05, 11, 08, 22, 03),
+                   authorUsername: "merry@gmail.com",
+                   description: "Microsoft has released a new Windows 10 Insider Preview that includes native support for Bash running on Ubuntu Linux.",
+                    tag: new List<Tag>()
+                    {
+                        new Tag("Windows"),
+                        new Tag("Programming")
+                    },
+                    comment: new List<Comment>()
+                    {
+                        new Comment(2, "First windows comment", context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
+                        new Comment(2, "Second windows comment")
+                    }
+               );
 
-            CreatePost(context,
-                  title: "Rogue Wave Updates Zend Framework",
-                  body: @"<p>Rogue Wave is updating its open-source framework for developing Web applications and services. According to the company, this is the first major release in four years. Zend Framework 3 features support for PHP 7, middleware runtime and performance enhancements.</p>
+                CreatePost(context,
+                   title: "Atom Text Editor Gets New Windows Features",
+                   body: @"<p>GitHub has released <b>Atom 1.7</b>, and the updated version of the text editor offers improvements for Windows developers. Specifically, it is now easier to build in Visual Studio, and it now supports the Appveyor CI continuous integration service for Windows.</p>
+                    <p>Other new features include improved tab switching, tree view and crash recovery. GitHub noted, ""Crashes are nobody''s idea of fun, but in case Atom does crash on you, it periodically saves your editor state. After relaunching Atom after a crash, you should find all your work saved and ready to go.""</p>
+                    <p>GitHub has also released a beta preview of Atom 1.8.</p>",
+                   date: new DateTime(2016, 03, 27, 17, 53, 48),
+                   authorUsername: "merry@gmail.com",
+                     description: ">GitHub has released <b>Atom 1.7</b>, and the updated version of the text editor offers improvements for Windows developers. Specifically, it is now easier to build in Visual Studio," +
+                                  "and it now supports the Appveyor CI continuous integration service for Windows.",
+                    tag: new List<Tag>()
+                    {
+                        new Tag("GitHub"),
+                        new Tag("Programming")
+                    },
+                    comment: new List<Comment>()
+                    {
+                        new Comment(3, "First GitHub comment", context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
+                        new Comment(3, "Second GitHub comment")
+                    }
+               );
+
+                CreatePost(context,
+                   title: "SoftUni 3.0 Just Launched",
+                   body: @"<p>The <b>Software University (SoftUni)</b> launched a new training methodology and training program for software engineers in Sofia.</p>
+                    <p>It is a big step ahead. Now SoftUni offers several professions:</p>
+                    <ul>
+                      <li>PHP Developer</li>
+                      <li>JavaScript Developer</li>
+                      <li>C# Web Developer</li>
+                      <li>Java Web Developer</li>
+                    </ul>",
+                   date: new DateTime(2016, 02, 18, 22, 14, 38),
+                   authorUsername: "pesho@gmail.com",
+                   description: "The Software University (SoftUni)" +
+                                "launched a new training methodology and training program for software engineers in Sofia.",
+                    tag: new List<Tag>()
+                    {
+                        new Tag("SoftUni"),
+                        new Tag("Programming")
+                    },
+                    comment: new List<Comment>()
+                    {
+                        new Comment(4, "First SoftUni comment", context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
+                        new Comment(4, "Second SoftUni comment")
+                    }
+               );
+
+                CreatePost(context,
+                    title: "Git 2.8 Adds Security and Productivity Features",
+                    body: @"<p>Version 2.8 of the open-source distributed version-control system Git has been released. The new edition provides a variety of new features, bugfixes and other improvements.</p>
+                    <p>According to GitHub, the most notable new features include:</p>
+                    <ul>
+                    <li><strong>Parallel fetches of submodules:</strong> “Using ‘git submodules,’ one Git repository can include other Git repositories as subdirectories. This can be a useful way to include libraries or other external dependencies into your main project. The top-level repository specifies which submodules it wants to include, and which version of each submodule,” wrote Jeff King, a Git team member, in a <a href=""https://github.com/blog/2131-git-2-8-has-been-released"">blog post</a>. According to him, if users have multiple submodules, fetches can be time-consuming. The latest release allows users to fetch from multiple submodules in parallel.</li>
+                    <li><strong>Don’t guess my identity: </strong>Instead of using one e-mail address for all of a user’s open-source projects, they can now tell Git what user name and e-mail they want to use before they commit.</li>
+                    <li><strong>Convergences with Git for Windows:</strong> The Git team has been working on making Git as easy to work with on Windows as it is on Linux and OS X. The latest release includes Git commands rewritten in C; Windows-specific changes from the Git for Windows project; and the ability to accept both LF and CRLF line endings. “This continuing effort will make it easier to keep the functionality of Git in sync across platforms as new features are added,” King wrote.</li>
+                    <li><strong>Security fixes: </strong>Git 2.8 addresses the vulnerability CVE-2016-2324. There have not been any reported exploits, but the vulnerability could execute arbitrary code when cloning a malicious repository, according to King.</li>
+                    </ul>
+                    <p>Other features include the ability to turn off Git’s clean and smudge filters; the ability to see where a particular setting came from; the ability to easily diagnose end-of-line problems; the ability to see a remote repository’s default branch; and support for cloning via the rsync protocol has been dropped.</p>
+                    <p>The full release notes are available <a href=""https://github.com/git/git/blob/v2.8.0/Documentation/RelNotes/2.8.0.txt"">here</a>.</p>",
+                    date: new DateTime(2016, 04, 11, 19, 02, 05),
+                    authorUsername: "geshu@gmail.com",
+                     description: "Version 2.8 of the open-source distributed version-control system Git has been released. The new edition provides a variety of new features, bugfixes and other improvements.",
+                    tag: new List<Tag>()
+                    {
+                        new Tag("GitHub"),
+                        new Tag("Programming")
+                    },
+                    comment: new List<Comment>()
+                    {
+                        new Comment(1, "First Git comment", context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
+                        new Comment(1, "Second Git comment")
+                    }
+                );
+
+                CreatePost(context,
+                   title: "Rogue Wave Updates Zend Framework",
+                   body: @"<p>Rogue Wave is updating its open-source framework for developing Web applications and services. According to the company, this is the first major release in four years. Zend Framework 3 features support for PHP 7, middleware runtime and performance enhancements.</p>
                     <p>The newly released support for PHP 7 aims to simplify how developers create, debug, monitor and deploy modern Web and mobile apps in PHP 7. “This is an exciting time to be a PHP developer,” said Zeev Suraski, cofounder of Zend and CTO of Rogue Wave. “With Zend Framework 3, we’re continuing our quest to make creating PHP applications simpler, more accessible and faster.”</p>
                     <p>In addition, version 3 of the framework features an architectural structure that allows developers to use components within Zend Framework apps or any other framework in order to reduce dependencies, and to enable reuse within the PHP ecosystem.</p>
                     <p>Another key update to the solution is a new middleware runtime. Expressive is designed to focus on simplicity and interoperability, and it enables developers to customize their solutions.</p>
                     <p>“I’m extremely proud of the work we’ve done with Expressive,” said Matthew Weier O’Phinney, principal engineer and Zend Framework project lead at Rogue Wave. “Expressive signals the future of PHP applications, composed of layered, single-purpose PSR-7 middleware.”</p>",
-                  date: new DateTime(2016, 06, 30, 17, 36, 52),
-                  authorUsername: "merry@gmail.com"
-              );
+                   date: new DateTime(2016, 06, 30, 17, 36, 52),
+                   authorUsername: "merry@gmail.com",
+                    description: "Rogue Wave is updating its open-source framework for developing Web applications and services.",
+                    tag: new List<Tag>()
+                    {
+                        new Tag("RogueWave"),
+                        new Tag("Programming")
+                    },
+                    comment: new List<Comment>()
+                    {
+                        new Comment(1, "First Rogue comment", context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
+                        new Comment(1, "Second Rogue comment")
+                    }
+               );
 
-            context.SaveChanges();
+
+                context.SaveChanges();
+            }
         }
 
         private void CreateUser(ApplicationDbContext context,
@@ -133,15 +242,22 @@ namespace SimpleForum.Migrations
         }
 
         private void CreatePost(ApplicationDbContext context,
-           string title, string body, DateTime date, string authorUsername)
+            string title, string body, DateTime date, string authorUsername, string description, List<Tag> tag, List<Comment> comment)
         {
             var post = new Post();
             post.Title = title;
             post.Body = body;
             post.Date = date;
-            post.Author = context.Users.Where(u => u.UserName == authorUsername).FirstOrDefault();
+            post.Author = context.Users.FirstOrDefault(u => u.UserName == authorUsername);
+            post.Description = description;
+            post.Tags = tag;
+            post.Comment = comment;
             context.Posts.Add(post);
         }
+
+
+
+
 
     }
 }

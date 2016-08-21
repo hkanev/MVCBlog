@@ -26,6 +26,10 @@ namespace SimpleForum.Models
 
         [Required]
         [DataType(DataType.MultilineText)]
+        public string Description { get; set; }
+
+        [Required]
+        [DataType(DataType.MultilineText)]
         public string Body { get; set; }
 
         [Required]
