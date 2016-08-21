@@ -1,8 +1,0 @@
-F:\GitHub\SimpleForum\SimpleForum2.0\Web\SimpleForum.Web.Infrastructure\bin\Debug\SimpleForum.Web.Infrastructure.dll
-F:\GitHub\SimpleForum\SimpleForum2.0\Web\SimpleForum.Web.Infrastructure\bin\Debug\SimpleForum.Web.Infrastructure.pdb
-F:\GitHub\SimpleForum\SimpleForum2.0\Web\SimpleForum.Web.Infrastructure\obj\Debug\SimpleForum.Web.Infrastructure.csprojResolveAssemblyReference.cache
-F:\GitHub\SimpleForum\SimpleForum2.0\Web\SimpleForum.Web.Infrastructure\obj\Debug\SimpleForum.Web.Infrastructure.dll
-F:\GitHub\SimpleForum\SimpleForum2.0\Web\SimpleForum.Web.Infrastructure\obj\Debug\SimpleForum.Web.Infrastructure.pdb
-F:\GitHub\SimpleForum\SimpleForum2.0\Web\SimpleForum.Web.Infrastructure\bin\Debug\AutoMapper.Net4.dll
-F:\GitHub\SimpleForum\SimpleForum2.0\Web\SimpleForum.Web.Infrastructure\bin\Debug\AutoMapper.dll
-F:\GitHub\SimpleForum\SimpleForum2.0\Web\SimpleForum.Web.Infrastructure\bin\Debug\AutoMapper.xml
