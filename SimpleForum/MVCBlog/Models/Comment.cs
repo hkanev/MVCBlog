@@ -38,5 +38,10 @@ namespace SimpleForum.Models
         public virtual ApplicationUser Author { get; set; }
 
         public virtual ICollection<Post> Posts { get; set; }
+
+        internal object ToList()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿@using MVCBlog.Models
 @using SimpleForum.Models
-@model MVCBlog.Models.HomeView
- 
+@model MVCBlog.Models.BlogViewModels
+
 <hr />
 <ol class="breadcrumb">
     <li>@Html.ActionLink("Home", "Index", "Home")</li>
@@ -21,15 +21,15 @@
                                     <span>
                                         @if (post.Author != null)
                                         {
-                                            @: <a href="#">@post.Author.FullName</a>
+                                            @: @post.Author.FullName
                                     }
                                         else
                                         {
-                                            @: <a href="#">Annonymous</a>
+                                            @:Annonymous
                                     }
                                     </span>
-                                    <span><a href="#">@post.Comment.Count Comments</a></span>
-                                    <span><a href="#">56 Likes</a></span>
+                                    <span>@post.Comment.Count Comments</span>
+                                    <span>56 Views</span>
                                 </div>
                             </div>
 
@@ -37,7 +37,6 @@
 
                                 <h2>@Html.ActionLink(post.Title, "Details", "Posts", new { id = post.Id }, null)</h2>
                                 <h3>@Html.Raw(post.Description)</h3>
-                                @*<a class="btn btn-primary readmore" href="blog-item.html">Read More <i class="fa fa-angle-right"></i></a>*@
                             </div>
                         </div>
                     </div>
@@ -65,20 +64,23 @@
                                 @foreach (var comment in Model.Comments)
                                 {
                                     <img src="~/Content/avatar3.png" />
-                                    @Utils.CutText(comment.Content,35)
+                                    @Utils.CutText(comment.Content, 35)
                                     <div class="entry-meta small muted">
                                         <span>
-                                            By <a href="#">
-                                                @if (comment.Author != null)
-                                                {
-                                                    @comment.Author.FullName;
-                                                }
-                                                else
-                                                {
-                                                    @:Anonnymous
-                                                }
-                                            </a>
-                                        </span><span>On <a href="#">@Utils.CutText(comment.Post.Title,25)</a></span>
+                                            By
+                                            @if (comment.Author != null)
+                                            {
+                                                @comment.Author.FullName;
+                                            }
+                                            else
+                                            {
+                                                @:Anonnymous 
+                                            }
+                                          </span>
+                                        <span>
+                                            On @Html.ActionLink(Utils.CutText(comment.Post.Title, 25),
+                                                         "Details", "Posts", new { id = comment.Post.Id }, null)
+                                        </span>
                                     </div>
                                 }
                             </div>

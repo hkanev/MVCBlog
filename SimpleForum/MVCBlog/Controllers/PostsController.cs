@@ -5,10 +5,12 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.DynamicData.ModelProviders;
 using System.Web.Mvc;
 using SimpleForum.Models;
 using SimpleForum.Extensions;
 using Microsoft.AspNet.Identity;
+using MVCBlog.Models;
 
 namespace SimpleForum.Controllers
 {
@@ -19,7 +21,8 @@ namespace SimpleForum.Controllers
         // GET: Posts
         public ActionResult Index()
         {
-            return View(db.Posts.Include(p => p.Author).ToList());
+            var post = db.Posts.Include(p => p.Author).ToList();
+            return View(post);
         }
 
         // GET: Posts/Details/5
@@ -30,13 +33,19 @@ namespace SimpleForum.Controllers
                 this.AddNotification("Post cant be found.", NotificationType.ERROR);
                 return RedirectToAction("Index");
             }
-            Post post = db.Posts.Find(id);
-            if (post == null)
+            var postViewModel = new PostViewModel();
+            postViewModel.Post = db.Posts.Find(id);
+            var comments =
+                db.Comments.Include(c => c.Post).Where(c => c.PostId == postViewModel.Post.Id).ToList();
+            postViewModel.Comments = comments;
+            var categories = db.Categories.ToList();
+
+            if (postViewModel.Post == null)
             {
                 this.AddNotification("Post cant be found.", NotificationType.ERROR);
                 return RedirectToAction("Index");
             }
-            return View(post);
+            return View(postViewModel);
         }
 
         // GET: Posts/Create
@@ -52,7 +61,7 @@ namespace SimpleForum.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Create([Bind(Include = "Id,Title,Body,Date")] Post post, int? id)
+        public ActionResult Create([Bind(Include = "Id,Title,Body,Date,Description")] Post post, int? id)
         {
             if (ModelState.IsValid)
             {
