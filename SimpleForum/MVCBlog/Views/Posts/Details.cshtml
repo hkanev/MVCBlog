@@ -1,5 +1,8 @@
 ﻿@using MVCBlog.Models
 @using SimpleForum.Models
+@using PagedList.Mvc;
+@using PagedList;
+@using IPagedList = PagedList.IPagedList
 @model MVCBlog.Models.PostViewModel
 
 <hr />
@@ -48,8 +51,8 @@
                     </div>
                 <!--/.blog-item-->
                 <h1 id="comments_title">@Model.Comments.Count Comments</h1>
-                @foreach (var comment in Model.Comments)
-                {
+                 @foreach (var comment in ViewBag.onePageOfComments)
+              {
                     <div class="media comment_section">
                         <div class="pull-left post_comments">
                             <a href="#"><img src="~/Content/avatar3.png" class="img-circle" alt="" /></a>
@@ -70,6 +73,9 @@
                         </div>
                     </div>
                 }
+                <div class="pager">
+                    @Html.PagedListPager((IPagedList)ViewBag.onePageOfComments, page => Url.Action("Details", new { page }))
+                </div>
             </div><!--/.col-md-8-->
             <aside class="col-md-4">
 

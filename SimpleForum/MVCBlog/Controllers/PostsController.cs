@@ -11,6 +11,7 @@ using SimpleForum.Models;
 using SimpleForum.Extensions;
 using Microsoft.AspNet.Identity;
 using MVCBlog.Models;
+using PagedList;
 
 namespace SimpleForum.Controllers
 {
@@ -26,7 +27,7 @@ namespace SimpleForum.Controllers
         }
 
         // GET: Posts/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, int? page)
         {
             if (id == null)
             {
@@ -45,6 +46,12 @@ namespace SimpleForum.Controllers
                 this.AddNotification("Post cant be found.", NotificationType.ERROR);
                 return RedirectToAction("Index");
             }
+
+            
+            var pageNumber = page ?? 1;
+            var onePageOfComments = comments.ToPagedList(pageNumber, 10);
+            ViewBag.onePageOfComments = onePageOfComments;
+
             return View(postViewModel);
         }
 

@@ -225,7 +225,6 @@
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\BlogViewModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\PagedPost.cs" />
     <Compile Include="Models\Post.cs" />
     <Compile Include="Models\PostViewModel.cs" />
     <Compile Include="Models\Tag.cs" />
