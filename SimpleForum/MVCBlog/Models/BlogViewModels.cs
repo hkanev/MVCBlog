@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 using SimpleForum.Models;
+using MvcPaging;
+using System.Collections;
 
 namespace MVCBlog.Models
 {
@@ -16,10 +19,10 @@ namespace MVCBlog.Models
             this.Categories = new List<Category>();
         }
 
-
         public virtual ICollection<Post> Posts { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<Tag> Tags { get; set; }
         public virtual ICollection<Category> Categories { get; set; }
-    }
+    
+}
 }
