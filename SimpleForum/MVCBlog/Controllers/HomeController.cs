@@ -8,6 +8,7 @@ using System.Data.Entity;
 using Microsoft.Ajax.Utilities;
 using MVCBlog.Models;
 using PagedList;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace SimpleForum.Controllers
 {
@@ -30,5 +31,7 @@ namespace SimpleForum.Controllers
 
             return View(blogViewModels);
         }
+
+    
     }
 }

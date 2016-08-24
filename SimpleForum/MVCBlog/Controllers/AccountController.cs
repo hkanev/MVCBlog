@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -50,6 +52,19 @@ namespace SimpleForum.Controllers
             {
                 _userManager = value;
             }
+        }
+
+      
+
+        public FileContentResult Photo(string userId)
+        {
+            // get EF Database (maybe different way in your applicaiton)
+            var db = HttpContext.GetOwinContext().Get<ApplicationDbContext>();
+
+            // find the user. I am skipping validations and other checks.
+            var user = db.Users.FirstOrDefault(x => x.Id == userId);
+
+            return new FileContentResult(user.ProfilePicture, "image/jpeg");
         }
 
         //
@@ -152,6 +167,10 @@ namespace SimpleForum.Controllers
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+
+                Image img = Image.FromFile(" F:\\Software Technologies\\Projects\\ArrayTest\\ArrayTest\\avatar3.png");
+                byte[] defaultPicture = imgToByteArray(img);
+                user.ProfilePicture = defaultPicture;
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -170,6 +189,16 @@ namespace SimpleForum.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+
+        private  byte[] imgToByteArray(Image img)
+        {
+            using (MemoryStream mStream = new MemoryStream())
+            {
+                img.Save(mStream, img.RawFormat);
+                return mStream.ToArray();
+            }
         }
 
         //

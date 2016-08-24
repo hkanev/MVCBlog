@@ -75,6 +75,37 @@ namespace SimpleForum.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public ActionResult ChangePicture()
+        {
+            ViewBag.Message = "Update your profile";
+            return View();
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePicture(HttpPostedFileBase Profile)
+        {
+            // get EF Database (maybe different way in your applicaiton)
+            var db = HttpContext.GetOwinContext().Get<ApplicationDbContext>();
+
+            // find the user. I am skipping validations and other checks.
+            var userid = User.Identity.GetUserId();
+            var user = db.Users.Where(x => x.Id == userid).FirstOrDefault();
+
+            // convert image stream to byte array
+            byte[] image = new byte[Profile.ContentLength];
+            Profile.InputStream.Read(image, 0, Convert.ToInt32(Profile.ContentLength));
+
+            user.ProfilePicture = image;
+
+            // save changes to database
+            db.SaveChanges();
+
+            return RedirectToAction("Index", "Home");
+        }
+
         //
         // POST: /Manage/RemoveLogin
         [HttpPost]
