@@ -102,9 +102,9 @@
                                 @foreach (var category in Model.Categories)
                                 {
                                     <li>
-                                        @Html.ActionLink(category.Name,
-                                                   "Details", "Category", new { id = category.Id }, null)<span class="badge">@category.Posts.Count</span>
-                                            </li>
+                                        @Html.ActionLink(category.Name, "Details", "Category", new { id = category.Id }, null)
+                                    <span class="badge">@category.Posts.Count</span>
+                                </li>
                                 }
                             </ul>
                         </div>
@@ -117,7 +117,10 @@
                     <ul class="tag-cloud">
                         @foreach (var tag in Model.Tags)
                         {
-                            <li><a class="btn btn-xs btn-primary" href="#">@tag.Name</a></li>
+                            <li>
+                                @Html.ActionLink(tag.Name, "Details", "Tags", new { id = tag.Id }, new { @class = "btn btn-xs btn-primary" })
+
+                            </li>
                         }
                     </ul>
                 </div><!--/.tags-->

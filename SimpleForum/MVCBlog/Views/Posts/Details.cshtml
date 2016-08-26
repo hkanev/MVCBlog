@@ -75,6 +75,7 @@
                 </div>
             </div><!--/.col-md-8-->
             <aside class="col-md-4">
+
                 <div class="widget categories">
                     <h3>Recent Comments</h3>
                     <div class="row">
@@ -82,14 +83,22 @@
                             <div class="single_comments">
                                 @foreach (var comment in Model.Comments)
                                 {
-                                    <img src="~/Content/avatar3.png" />
+                                    if (comment.Author != null && comment.Author.ProfilePicture != null)
+                                    {
+                                        <img src="@Url.Action("Photo", "Home" , new { UserId=comment.Author.Id })" height="60" width="60" />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/Content/avatar3.png" height="60" width="60" />
+                                    }
                                     @Utils.CutText(comment.Content, 35)
                                     <div class="entry-meta small muted">
                                         <span>
                                             By
                                             @if (comment.Author != null)
                                             {
-                                                @comment.Author.FullName;
+                                                @comment.Author.FullName
+                                                ;
                                             }
                                             else
                                             {
@@ -98,7 +107,7 @@
                                         </span>
                                         <span>
                                             On @Html.ActionLink(Utils.CutText(comment.Post.Title, 25),
-                                                         "Details", "Posts", new { id = comment.Post.Id }, null)
+                                                   "Details", "Posts", new { id = comment.Post.Id }, null)
                                         </span>
                                     </div>
                                 }
@@ -106,6 +115,39 @@
                         </div>
                     </div>
                 </div><!--/.recent comments-->
+
+                <div class="widget categories">
+                    <h3>Categories</h3>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <ul class="blog_category">
+                                @foreach (var category in Model.Categories)
+                                {
+                                    <li>
+                                        @Html.ActionLink(category.Name, "Details", "Category", new { id = category.Id }, null)
+                                    <span class="badge">@category.Posts.Count</span>
+                                </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div><!--/.categories-->
+
+
+                <div class="widget tags">
+                    <h3>Popular Tags</h3>
+                    <ul class="tag-cloud">
+                        @foreach (var tag in Model.Tags)
+                        {
+                            <li>
+                                @Html.ActionLink(tag.Name, "Details", "Tags", new { id = tag.Id }, new { @class = "btn btn-xs btn-primary" })
+
+                            </li>
+                        }
+                    </ul>
+                </div><!--/.tags-->
+
+
             </aside>
         </div><!--/.row-->
     </div>
