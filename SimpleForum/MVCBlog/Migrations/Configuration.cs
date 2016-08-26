@@ -34,16 +34,8 @@ namespace SimpleForum.Migrations
                 CreateRole(context, "Administrators");
                 AddUserToRole(context, "admin@gmail.com", "Administrators");
 
-                var tagList = new List<Tag>();
-
-                var tag1 = new Tag {Name = "Java"};
-                tagList.Add(tag1);
-
-                var tag2 = new Tag {Name = "PHP"};
-                tagList.Add(tag2);
-
-                var tag3 = new Tag {Name = "C#"};
-                tagList.Add(tag3);
+                var tag = new Tag {Name = "Programming"};
+            
 
                 var category1 = new Category("Others");
                 var category2 = new Category("Programming");
@@ -61,7 +53,7 @@ namespace SimpleForum.Migrations
                     tag: new List<Tag>()
                     {
                         new Tag("HTML5"),
-                        new Tag("Programming")
+                        tag
                     }, 
                     comment: new List<Comment>()
                     {
@@ -81,7 +73,7 @@ namespace SimpleForum.Migrations
                     tag: new List<Tag>()
                     {
                         new Tag("Windows"),
-                        new Tag("Programming")
+                        tag
                     },
                     comment: new List<Comment>()
                     {
@@ -103,7 +95,7 @@ namespace SimpleForum.Migrations
                     tag: new List<Tag>()
                     {
                         new Tag("GitHub"),
-                        new Tag("Programming")
+                        tag
                     },
                     comment: new List<Comment>()
                     {
@@ -130,7 +122,7 @@ namespace SimpleForum.Migrations
                     tag: new List<Tag>()
                     {
                         new Tag("SoftUni"),
-                        new Tag("Programming")
+                        tag
                     },
                     comment: new List<Comment>()
                     {
@@ -158,7 +150,7 @@ namespace SimpleForum.Migrations
                     tag: new List<Tag>()
                     {
                         new Tag("GitHub"),
-                        new Tag("Programming")
+                        tag
                     },
                     comment: new List<Comment>()
                     {
@@ -181,7 +173,7 @@ namespace SimpleForum.Migrations
                     tag: new List<Tag>()
                     {
                         new Tag("RogueWave"),
-                        new Tag("Programming")
+                        tag
                     },
                     comment: new List<Comment>()
                     {

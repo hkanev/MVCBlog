@@ -22,16 +22,26 @@ namespace SimpleForum.Controllers
                 .OrderByDescending(p => p.Date).Take(5).ToList();
             blogViewModels.Comments = db.Comments.Include((c => c.Author)).OrderByDescending(c => c.Date).Take(5).ToList();
             blogViewModels.Categories = db.Categories.ToList();
-            blogViewModels.Tags = db.Tags.ToList();
+            blogViewModels.Tags = db.Tags.OrderBy(t => t.Posts.Count).Take(12).ToList();
 
             var postList = db.Posts.ToList();
             var pageNumber = page ?? 1;
-            var onePageOfPosts = postList.ToPagedList(pageNumber, 5); 
+            var onePageOfPosts = postList.ToPagedList(pageNumber, 4); 
             ViewBag.onePageOfPosts = onePageOfPosts;
 
             return View(blogViewModels);
         }
 
-    
+        public FileContentResult Photo(string userId)
+        {
+            // get EF Database (maybe different way in your applicaiton)
+            var db = HttpContext.GetOwinContext().Get<ApplicationDbContext>();
+
+            // find the user. I am skipping validations and other checks.
+            var user = db.Users.FirstOrDefault(x => x.Id == userId);
+
+            return new FileContentResult(user.ProfilePicture, "image/jpeg");
+        }
+
     }
 }

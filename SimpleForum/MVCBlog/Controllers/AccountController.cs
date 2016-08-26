@@ -56,16 +56,7 @@ namespace SimpleForum.Controllers
 
       
 
-        public FileContentResult Photo(string userId)
-        {
-            // get EF Database (maybe different way in your applicaiton)
-            var db = HttpContext.GetOwinContext().Get<ApplicationDbContext>();
-
-            // find the user. I am skipping validations and other checks.
-            var user = db.Users.FirstOrDefault(x => x.Id == userId);
-
-            return new FileContentResult(user.ProfilePicture, "image/jpeg");
-        }
+       
 
         //
         // GET: /Account/Login

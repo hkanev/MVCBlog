@@ -4,55 +4,52 @@
 @using PagedList;
 @using IPagedList = PagedList.IPagedList
 @model MVCBlog.Models.PostViewModel
-
 <hr />
 <ol class="breadcrumb">
     <li>@Html.ActionLink("Home", "Index", "Home")</li>
     <li>@Html.ActionLink("Reply", "Create", "Comments", new { id = Model.Post.Id }, null)</li>
-    <li>@Html.ActionLink("New post", "Create", "Posts", new {id = Model.Post.Category.Id}, null)</li>
+    <li>@Html.ActionLink("New post", "Create", "Posts", new { id = Model.Post.Category.Id }, null)</li>
 </ol>
 <hr />
 <section id="blog" class="container-fluid">
     <div class="blog">
         <div class="row">
             <div class="col-md-8">
-                    <div class="blog-item">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-2 text-center">
-                                <div class="entry-meta">
-                                    <span id="publish_date">@Model.Post.Date.ToString("dd MMM")</span>
-                                    <span>
-                                        @if (Model.Post.Author != null)
-                                        {
-                                            @: @Model.Post.Author.FullName
-                                        }
-                                        else
-                                        {
-                                            @:Annonymous
-                                        }
-                                    </span>
-                                    <span>@Model.Post.Comment.Count Comments</span>
-                                    <span>56 Views</span>
-                                </div>
-                            </div>
-
-                            <div class="col-xs-12 col-sm-10 blog-content">
-
-                                <h2>@Html.ActionLink(Model.Post.Title, "Details", "Posts", new {id = Model.Post.Id}, null)</h2>
-                                <h3>@Html.Raw(Model.Post.Body)</h3>
-                                <div class="post-tags">
-                                    @foreach (var tag in Model.Post.Tags)
+                <div class="blog-item">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-2 text-center">
+                            <div class="entry-meta">
+                                <span id="publish_date">@Model.Post.Date.ToString("dd MMM")</span>
+                                <span>
+                                    @if (Model.Post.Author != null)
                                     {
-                                        <span class="badge-default1">@tag.Name</span>
-                                    }
-                                </div>
-                            </div>                         
+                                        @: @Model.Post.Author.FullName
+                                        }
+                                    else
+                                    {
+                                        @:Annonymous
+                                        }
+                                </span>
+                                <span>@Model.Post.Comment.Count Comments</span>
+                                <span>56 Views</span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-10 blog-content">
+                            <h2>@Html.ActionLink(Model.Post.Title, "Details", "Posts", new { id = Model.Post.Id }, null)</h2>
+                            <h3>@Html.Raw(Model.Post.Body)</h3>
+                            <div class="post-tags">
+                                @foreach (var tag in Model.Post.Tags)
+                                {
+                                    <span class="badge-default1">@tag.Name</span>
+                                }
+                            </div>
                         </div>
                     </div>
+                </div>
                 <!--/.blog-item-->
                 <h1 id="comments_title">@Model.Comments.Count Comments</h1>
-                 @foreach (var comment in ViewBag.onePageOfComments)
-              {
+                @foreach (var comment in ViewBag.onePageOfComments)
+                {
                     <div class="media comment_section">
                         <div class="pull-left post_comments">
                             <a href="#"><img src="~/Content/avatar3.png" class="img-circle" alt="" /></a>
@@ -60,12 +57,12 @@
                         <div class="media-body post_reply_comments">
                             <h3>
                                 @if (Model.Post.Author != null)
-                                     {
-                                         @: @comment.Author.FullName
+                                {
+                                    @: @comment.Author.FullName
                                      }
-                                     else
-                                     {
-                                         @:Annonymous
+                                else
+                                {
+                                    @:Annonymous
                                      }
                             </h3>
                             <h4>@comment.Date</h4>
@@ -78,7 +75,6 @@
                 </div>
             </div><!--/.col-md-8-->
             <aside class="col-md-4">
-
                 <div class="widget categories">
                     <h3>Recent Comments</h3>
                     <div class="row">

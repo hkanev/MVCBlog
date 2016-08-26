@@ -12,36 +12,24 @@ using SimpleForum.Extensions;
 using SimpleForum.Models;
 using PagedList;
 
-namespace SimpleForum.Controllers
+namespace MVCBlog.Controllers
 {
-    public class CategoryController : Controller
+    public class TagsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Categories
-        public ActionResult Index(string sortOrder)
+        // GET: Tags
+        public ActionResult Index()
         {
-            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            var category = from s in db.Categories
-                           select s;
-            switch (sortOrder)
-            {
-                case "name_desc":
-                    category = category.Where(c => c.Id==1);
-                    break;
-                default:
-                    category = category.OrderBy(s => s.Name);
-                    break;
-            }
-            return View(category.ToList());
+            return View(db.Tags.ToList());
         }
 
-        // GET: Categories/Details/5
-        public ActionResult Details(int? page,int? id)
+        // GET: Tags/Details/5
+        public ActionResult Details(int? page, int? id)
         {
             if (id == null)
             {
-                this.AddNotification("Category cant be found.", NotificationType.ERROR);
+                this.AddNotification("Tag cant be found.", NotificationType.ERROR);
                 return RedirectToAction("Index");
             }
 
@@ -49,99 +37,99 @@ namespace SimpleForum.Controllers
             blogViewModels.Comments = db.Comments.Include((c => c.Author)).OrderByDescending(c => c.Date).Take(5).ToList();
             blogViewModels.Categories = db.Categories.ToList();
             blogViewModels.Tags = db.Tags.ToList();
-            blogViewModels.Category = db.Categories.Find(id);
-            var posts = db.Posts.Where(p => p.Category.Id == blogViewModels.Category.Id).ToList();
+            blogViewModels.Tag = db.Tags.Find(id);
+            var posts = db.Posts.Where(p => p.Tags.Select(t => t.Id).Contains((int)id)).ToList();
             blogViewModels.Posts = posts.OrderByDescending(p => p.Date).ToList();
 
             var pageNumber = page ?? 1;
             var onePageOfPosts = posts.ToPagedList(pageNumber, 10);
             ViewBag.onePageOfPosts = onePageOfPosts;
 
-            if (blogViewModels.Category == null)
+            if (blogViewModels.Tag == null)
             {
-                this.AddNotification("Category cant be found.", NotificationType.ERROR);
+                this.AddNotification("Tag cant be found.", NotificationType.ERROR);
                 return RedirectToAction("Index");
             }
 
             return View(blogViewModels);
         }
 
-        // GET: Categories/Create
+        // GET: Tags/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Categories/Create
+        // POST: Tags/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name")] Category category)
+        public ActionResult Create([Bind(Include = "Id,Name")] Tag tag)
         {
             if (ModelState.IsValid)
             {
-                db.Categories.Add(category);
+                db.Tags.Add(tag);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(category);
+            return View(tag);
         }
 
-        // GET: Categories/Edit/5
+        // GET: Tags/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = db.Categories.Find(id);
-            if (category == null)
+            Tag tag = db.Tags.Find(id);
+            if (tag == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+            return View(tag);
         }
 
-        // POST: Categories/Edit/5
+        // POST: Tags/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name")] Category category)
+        public ActionResult Edit([Bind(Include = "Id,Name")] Tag tag)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(category).State = EntityState.Modified;
+                db.Entry(tag).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(category);
+            return View(tag);
         }
 
-        // GET: Categories/Delete/5
+        // GET: Tags/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = db.Categories.Find(id);
-            if (category == null)
+            Tag tag = db.Tags.Find(id);
+            if (tag == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+            return View(tag);
         }
 
-        // POST: Categories/Delete/5
+        // POST: Tags/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Category category = db.Categories.Find(id);
-            db.Categories.Remove(category);
+            Tag tag = db.Tags.Find(id);
+            db.Tags.Remove(tag);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
