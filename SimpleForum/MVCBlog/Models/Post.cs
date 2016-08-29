@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 using SimpleForum.Models;
 
 namespace SimpleForum.Models
@@ -25,11 +26,11 @@ namespace SimpleForum.Models
         public string Title { get; set; }
 
         [Required]
-        [DataType(DataType.MultilineText)]
         public string Description { get; set; }
 
         [Required]
-        [DataType(DataType.MultilineText)]
+        [AllowHtml]
+        [UIHint("tinymce_full")]
         public string Body { get; set; }
 
         [Required]
@@ -40,6 +41,10 @@ namespace SimpleForum.Models
         public string Author_Id { get; set; }
 
         public ApplicationUser Author { get; set; }
+
+        [ForeignKey("Category")]
+        public int Category_Id { get; set; }
+
         public Category Category { get; set; }
 
         public virtual ICollection<Tag> Tags { get; set; }

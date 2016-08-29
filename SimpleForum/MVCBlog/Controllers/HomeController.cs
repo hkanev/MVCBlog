@@ -18,13 +18,11 @@ namespace SimpleForum.Controllers
         public ActionResult Index(int? page)
         {
             var blogViewModels = new BlogViewModels();
-            blogViewModels.Posts = db.Posts.Include(p => p.Author)
-                .OrderByDescending(p => p.Date).Take(5).ToList();
             blogViewModels.Comments = db.Comments.Include((c => c.Author)).OrderByDescending(c => c.Date).Take(5).ToList();
             blogViewModels.Categories = db.Categories.ToList();
             blogViewModels.Tags = db.Tags.OrderBy(t => t.Posts.Count).Take(12).ToList();
 
-            var postList = db.Posts.ToList();
+            var postList = db.Posts.OrderByDescending(c => c.Date).ToList();
             var pageNumber = page ?? 1;
             var onePageOfPosts = postList.ToPagedList(pageNumber, 4); 
             ViewBag.onePageOfPosts = onePageOfPosts;

@@ -15,6 +15,7 @@ using PagedList;
 
 namespace SimpleForum.Controllers
 {
+    [ValidateInput(false)]
     public class PostsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -59,6 +60,8 @@ namespace SimpleForum.Controllers
         [Authorize]
         public ActionResult Create()
         {
+            ViewBag.Categories = db.Categories.ToList();
+            ViewBag.Tags = new MultiSelectList(db.Tags,"Id","Name");
             return View();
         }
 
@@ -68,26 +71,31 @@ namespace SimpleForum.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Create([Bind(Include = "Id,Title,Body,Date,Description")] Post post, int? id)
+        public ActionResult Create([Bind(Include = "Id,Title,Body,Date,Description,Category_Id")] Post post, FormCollection form)
         {
+            ViewBag.Categories = db.Categories.ToList();
+            string selectedValues = form["Tags"];
+            var tags = selectedValues.Split(',');
+            int[] id = tags.Select(int.Parse).ToArray();
             if (ModelState.IsValid)
             {
-                if (id == null)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                }
-                Category category = db.Categories.Find(id);
                 if (post == null)
                 {
                     return HttpNotFound();
                 }
-                post.Category = category;
+                foreach (var tagid in id)
+                {
+                    var tag = db.Tags.FirstOrDefault(t => t.Id == tagid);
+                    post.Tags.Add(tag);
+                }
                 post.Author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                post.Author_Id = User.Identity.GetUserId();
                 db.Posts.Add(post);
                 db.SaveChanges();
                 this.AddNotification("Post created", NotificationType.INFO);
                 return RedirectToAction("Index");
             }
+
 
             return View(post);
         }
