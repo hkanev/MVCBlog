@@ -36,13 +36,13 @@ namespace MVCBlog.Controllers
             var blogViewModels = new BlogViewModels();
             blogViewModels.Comments = db.Comments.Include((c => c.Author)).OrderByDescending(c => c.Date).Take(5).ToList();
             blogViewModels.Categories = db.Categories.ToList();
-            blogViewModels.Tags = db.Tags.ToList();
+            blogViewModels.Tags = db.Tags.OrderByDescending(t => t.Posts.Count).Take(9).ToList();
             blogViewModels.Tag = db.Tags.Find(id);
             var posts = db.Posts.Where(p => p.Tags.Select(t => t.Id).Contains((int)id)).ToList();
             blogViewModels.Posts = posts.OrderByDescending(p => p.Date).ToList();
 
             var pageNumber = page ?? 1;
-            var onePageOfPosts = posts.ToPagedList(pageNumber, 10);
+            var onePageOfPosts = posts.ToPagedList(pageNumber, 2);
             ViewBag.onePageOfPosts = onePageOfPosts;
 
             if (blogViewModels.Tag == null)
