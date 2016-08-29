@@ -1,5 +1,7 @@
-using System.Collections.Generic;
+Ôªøusing System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
+using System.IO;
 using Microsoft.Ajax.Utilities;
 
 namespace SimpleForum.Migrations
@@ -25,171 +27,235 @@ namespace SimpleForum.Migrations
             if (!context.Users.Any())
             {
                 // If the database is empty, populate sample data in it
-
-                CreateUser(context, "admin@gmail.com", "123", "System Administrator");
-                CreateUser(context, "pesho@gmail.com", "123", "Peter Ivanov");
-                CreateUser(context, "merry@gmail.com", "123", "Maria Petrova");
-                CreateUser(context, "geshu@gmail.com", "123", "George Petrov");
+                Image man2 = Image.FromFile("F:\\GitHub\\SimpleForum\\SimpleForum\\MVCBlog\\Content\\images\\Users\\man2.jpg");
+                byte[] man2pic = imgToByteArray(man2);
+                Image man3 = Image.FromFile("F:\\GitHub\\SimpleForum\\SimpleForum\\MVCBlog\\Content\\images\\Users\\man3.jpg");
+                byte[] man3pic = imgToByteArray(man3);
+                Image man4 = Image.FromFile("F:\\GitHub\\SimpleForum\\SimpleForum\\MVCBlog\\Content\\images\\Users\\man4.jpg");
+                byte[] man4pic = imgToByteArray(man4);
+                Image girl = Image.FromFile("F:\\GitHub\\SimpleForum\\SimpleForum\\MVCBlog\\Content\\images\\Users\\team-member.jpg");
+                byte[] girlPic = imgToByteArray(girl);
+                CreateUser(context, "admin@gmail.com", "123", "System Administrator", man2pic);
+                CreateUser(context, "pesho@gmail.com", "123", "Peter Ivanov", man4pic);
+                CreateUser(context, "merry@gmail.com", "123", "Maria Petrova", girlPic);
+                CreateUser(context, "geshu@gmail.com", "123", "George Petrov",man3pic);
 
                 CreateRole(context, "Administrators");
                 AddUserToRole(context, "admin@gmail.com", "Administrators");
 
-                var tag = new Tag {Name = "Programming"};
-            
 
-                var category1 = new Category("Others");
-                var category2 = new Category("Programming");
+                var Vuelta = new Tag { Name = "Vuelta a Espana" };
+                context.Tags.Add(Vuelta);
+                var Giro = new Tag { Name = "Giro d'Italia" };
+                context.Tags.Add(Giro);
+                var Tour = new Tag { Name = "Tour de france" };
+                context.Tags.Add(Tour);
+                var Classics = new Tag { Name = "Classics" };
+                context.Tags.Add(Classics);
+                var Olympic = new Tag { Name = "OlympicGames" };
+                context.Tags.Add(Olympic);
+                var WorldChampionship = new Tag { Name = "WorldChampionship" };
+                context.Tags.Add(WorldChampionship);
+                var Recovery = new Tag { Name = "Recovery" };
+                context.Tags.Add(Recovery);
+                var Training = new Tag { Name = "Training" };
+                context.Tags.Add(Training);
+                var Route = new Tag { Name = "Route" };
+                context.Tags.Add(Route);
+                var UCI = new Tag { Name = "UCI" };
+                context.Tags.Add(UCI);
+                var ASO = new Tag { Name = "A.S.O" };
+                context.Tags.Add(ASO);
+                var Guide = new Tag { Name = "Guide" };
+                context.Tags.Add(Guide);
+                var Inovasion = new Tag { Name = "Inovasion" };
+                context.Tags.Add(Inovasion);
+                var –úaintenance = new Tag { Name = "–úaintenance" };
+                context.Tags.Add(–úaintenance);
+                var News = new Tag { Name = "News" };
+                context.Tags.Add(News);
 
-               
 
+                var Road = new Category("Road");
+                context.Categories.Add(Road);
+                var Mountain = new Category("Mountain");
+                context.Categories.Add(Mountain);
+                var Tech = new Category("Tech");
+                context.Categories.Add(Tech);
+                var Track = new Category("Track");
+                context.Categories.Add(Track);
+
+                Image tour = Image.FromFile("F:\\GitHub\\SimpleForum\\SimpleForum\\MVCBlog\\Content\\images\\Posts\\Tour2016.jpg");
+                byte[] tourPic = imgToByteArray(tour);
                 CreatePost(context,
-                    title: "Work Begins on HTML5.1",
-                    body: @"<p>The World Wide Web Consortium (W3C) has begun work on <b>HTML5.1</b>, and this time it is handling the creation of the standard a little differently. The specification has its <b><a href=""https://w3c.github.io/html/"">own GitHub project</a></b> where anyone can see what is happening and propose changes.</p>
-                    <p>The organization says the goal for the new specification is ""to <b>match reality better</b>, to make the specification as clear as possible to readers, and of course to make it possible for all stakeholders to propose improvements, and understand what makes changes to HTML successful.""</p>
-                    <p>Creating HTML5 took years, but W3C hopes using GitHub will speed up the process this time around. It plans to release a candidate recommendation for HTML5.1 by <b>June</b> and a full recommendation in <b>September</b>.</p>",
-                    date: new DateTime(2016, 03, 27, 17, 53, 48),
+                    title: "The Winners of the 2016 Tour de France",
+                    body: @"Chris Froome sealed a third career Tour de France victory and a fourth for Team Sky as the Briton safely negotiated the final stage into Paris. The Briton enjoyed a relaxed start to the 21st stage, sharing beers then champagne with his teammates before the peloton arrived on the Champs-√âlys√©es and the sprint teams took over.
+                            For the second year running, it was Andre Greipel taking the stage win as the German fastman made it stages for Lotto-Soudal. Mechanicals saw Marcel Kittel and Bryan Coquard miss the sprint with world champion Peter Sagan and Alexander Kristoff challenging Greipel for the win but ultimately coming up short.",
+                    date: new DateTime(2016, 07, 24, 17, 53, 48),
                     authorUsername: "merry@gmail.com",
-                    description: "The World Wide Web Consortium (W3C) has begun work on <b>HTML5.1 , and this time it is handling the creation of the standard a little differently.",
-                    tag: new List<Tag>()
+                    description: "In a stellar performance, Team Sky's Chris Froome finished Stage 21 as the winner of the 2016 Tour de France.",
+                     tag: new List<Tag>()
                     {
-                        new Tag("HTML5"),
-                        tag
-                    }, 
+                        Tour, News
+                    },
                     comment: new List<Comment>()
                     {
-                        new Comment(1, "First comment", context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
-                        new Comment(1, "Second comment")
+                        new Comment(1, "One of the most boring tours I ve ever watched!!!", context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
+                        new Comment(1, "No one was half good as Chris.", context.Users.FirstOrDefault(u => u.UserName == "pesho@gmail.com")),
+                        new Comment(1, "All these young kids cry how hard things are. Poss off! Your life is easy. Ride and suffer."
+                        , context.Users.FirstOrDefault(u => u.UserName == "geshu@gmail.com")),
+                        new Comment(1, "Froome running without bike was the best thing ever.", context.Users.FirstOrDefault(u => u.UserName == "admin@gmail.com")),
                     },
-                    category: category2
+                    category: Road,
+                    postPicture: tourPic
                 );
 
+                Image giro = Image.FromFile("F:\\GitHub\\SimpleForum\\SimpleForum\\MVCBlog\\Content\\images\\Posts\\Giro2016.jpg");
+                byte[] giroPic = imgToByteArray(giro);
                 CreatePost(context,
-                   title: "Windows 10 Preview with Bash Support Now Available",
-                   body: @"<p>Microsoft has released a new <b>Windows 10 Insider Preview</b> that includes native support for <b>Bash running on Ubuntu Linux</b>. The company first announced the new feature at last week''s Build development conference, and it was one of the biggest stories of the event. The current process for installing Bash is a little complication, but Microsoft has a blog post that explains how the process works.</p>
-                    <p>The preview build also includes <b>Cortana</b> upgrades, extensions support, the new <b>Skype</b> Universal Windows Platform app and some interface improvements.</p>",
-                   date: new DateTime(2016, 05, 11, 08, 22, 03),
-                   authorUsername: "merry@gmail.com",
-                   description: "Microsoft has released a new Windows 10 Insider Preview that includes native support for Bash running on Ubuntu Linux.",
-                    tag: new List<Tag>()
-                    {
-                        new Tag("Windows"),
-                        tag
-                    },
-                    comment: new List<Comment>()
-                    {
-                        new Comment(2, "First windows comment", context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
-                        new Comment(2, "Second windows comment")
-                    },
-                    category: category2
-               );
+                  title: "The Winners of the 2016 Giro",
+                  body: @"Vincenzo Nibali (Astana) secured victory at the 99th Giro d‚ÄôItalia after finishing safely on the final stage of the race into Turin.
+                    Giacomo Nizzolo (Trek-Segafredo) thought he had finally secured his first Grand Tour stage win after near 30 top-10 placings, but was 
+                    relegated due to an irregular sprint with the win awarded to second place Nikia Arndt (Giant-Alpecin). Nizzolo still secured the red points jersey for a    second year in a row.
+                    Nibali only had to finish the race to secure victory, after GC times were neutralised on the 8km finishing circuit with crashes taking place on the wet roads, including seventh place overall Rigoberto Uran (Cannondale) and runner-up Esteban Chaves (Orica-GreenEdge). Both were able to continue.
+                    Unusually for the traditional processional affair of the final stage, at least three riders were forced to abandon so close to the end; Lars Bak (Lotto-Soudal) had to climb off after a crash in the very early part of the day, while Jasha S√ºtterlin (Movistar) and Johann Van Zyl (Dimension Data) 
+                    also succumbed to injury having been caught in the crash with Uran.",
+                  date: new DateTime(2016, 07, 24, 17, 53, 48),
+                  authorUsername: "admin@gmail.com",
+                  description: "The general classification was neutralised after Rigoberto Uran and Esteban Chaves was caught up in a crash with around " +
+                               "30km to go, as provisional stage winner Giacomo Nizzolo was relegated for an irregular sprint",
+                   tag: new List<Tag>()
+                  {
+                        Giro, News
+                  },
+                  comment: new List<Comment>()
+                  {
+                        new Comment(2, "Loved this Giro - every minute of it, and such a great advert for the sport. But so so sad to to see that, on the final podium, only 1 of the 3 has no history of cheating. Still a long way to go.",
+                        context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
+                        new Comment(2, "Nibali wins. The time he took off Kruiswijk I can see; 53 seconds off Chaves on stage 19 and then a further 96 on stage 20 - there should be a very serious contract awaiting at Team Bahrain (or what ever the name is to be). Another problem for Vino's in box then... Does seem odd that a man who can do this would have done that thing that got him disqualified from the Vuelta.",
+                        context.Users.FirstOrDefault(u => u.UserName == "pesho@gmail.com")),
+                        new Comment(2, "So Froome, Wiggins and Sky generally have to constantly answer questions and allegations about doping and Nibali is beyond suspicion? When his own team are blood testing him due to his lack of performance, then a day or two later it's the greatest comeback since Lazarus..... Surely even the most one eyed Nibali fan can see why questions might arise given the sports past (let alone the connections to Astana and Vino).", 
+                        context.Users.FirstOrDefault(u => u.UserName == "geshu@gmail.com")),
+                        new Comment(2, "Can't feel good about the final result. From nowhere and done to winner... who trusts Astana? who trusts individual cyclists when- pride, money and.. money are at stake Who therefore trusts cycling, certainly not me after this result."
+                        , context.Users.FirstOrDefault(u => u.UserName == "admin@gmail.com"))
+                  },
+                  category: Road,
+                  postPicture: giroPic
+              );
+
+                Image vauelta = Image.FromFile("F:\\GitHub\\SimpleForum\\SimpleForum\\MVCBlog\\Content\\images\\Posts\\Vauelta2015.jpg");
+                byte[] vaueltaPic = imgToByteArray(vauelta);
+                CreatePost(context,
+                  title: "The Winners of the 2015 Vauelta",
+                  body: @"John Degenkolb (Giant-Alpecin) had to wait a long time for a Grand Tour stage win in 2015 but the German beat a depleted field in Madrid to seal his 10th Vuelta a Espa√±a win.
+                    Degenkolb looked to have gone too early in the final sprint but found a second wind to hold off Danny Van Poppel (Trek) and Jempy Drucker (BMC) on the line.
+                    Fabio Aru (Astana) finished safely in the pack to win his first Grand Tour at only his fifth attempt.
+                    After the traditional leisurely start to the stage, the real racing got going when the riders hit the circuit in Madrid.",
+                  date: new DateTime(2016, 07, 24, 17, 53, 48),
+                  authorUsername: "pesho@gmail.com",
+                  description: "Fabio Aru finished the final stage of the Vuelta a Espa√±a safely to seal his maiden Grand Tour win as John Degenkolb took the stage",
+                   tag: new List<Tag>()
+                  {
+                        Vuelta, News
+                  },
+                  comment: new List<Comment>()
+                  {
+                        new Comment(3, "Loved this Giro - every minute of it, and such a great advert for the sport. But so so sad to to see that, on the final podium, only 1 of the 3 has no history of cheating. Still a long way to go.",
+                        context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
+                        new Comment(3, "Nibali wins. The time he took off Kruiswijk I can see; 53 seconds off Chaves on stage 19 and then a further 96 on stage 20 - there should be a very serious contract awaiting at Team Bahrain (or what ever the name is to be). Another problem for Vino's in box then... Does seem odd that a man who can do this would have done that thing that got him disqualified from the Vuelta.",
+                        context.Users.FirstOrDefault(u => u.UserName == "pesho@gmail.com")),
+                        new Comment(3, "So Froome, Wiggins and Sky generally have to constantly answer questions and allegations about doping and Nibali is beyond suspicion? When his own team are blood testing him due to his lack of performance, then a day or two later it's the greatest comeback since Lazarus..... Surely even the most one eyed Nibali fan can see why questions might arise given the sports past (let alone the connections to Astana and Vino).",
+                        context.Users.FirstOrDefault(u => u.UserName == "geshu@gmail.com")),
+                        new Comment(3, "Can't feel good about the final result. From nowhere and done to winner... who trusts Astana? who trusts individual cyclists when- pride, money and.. money are at stake Who therefore trusts cycling, certainly not me after this result."
+                        , context.Users.FirstOrDefault(u => u.UserName == "admin@gmail.com"))
+                  },
+                  category: Road,
+                  postPicture: vaueltaPic
+              );
+
+                Image mtb = Image.FromFile("F:\\GitHub\\SimpleForum\\SimpleForum\\MVCBlog\\Content\\images\\Posts\\mtb-shreddin--1472210686521-10tgha8wnv9q4-700-80.jpg");
+                byte[] mtbPic = imgToByteArray(mtb);
+                CreatePost(context,
+                  title: "Cycling UK wants to open up more trails to mountain bikers.",
+                  body: @"To do this, Cycling UK wants to first gain a better understanding of how people's cycling habits fit in with current access arrangements to rights of way in England and Wales. By completing the organisation‚Äôs short survey, you can do your part to help it get a better picture of where, how and why people ride their bikes off road.
+                        Under current access laws, cyclists have the right to use only a fraction of the country‚Äôs vast network of footpaths and bridleways.
+                        Currently, whether or not a cyclist can use a right of way is determined by its historical usage as opposed to its suitability for riding. In practical terms, this means that a cyclist may have the right to freely skitter down a muddy and un-ridable bridleway but not on an asphalt surfaced footpath, even if the same path is used privately by motor vehicles.
+                        Roger Geffe, Cycling UK‚Äôs policy director points towards Scotland‚Äôs common sense approach to access rights for cyclists and hopes that the same can be adopted in the future in the rest of the UK.
+                        ‚ÄúWe‚Äôve seen how off-road cycling can thrive in harmony with all other outdoor users [in Scotland], and Cycling UK now wants to understand how we can bring the same benefits to England and Wales,‚Äù he says.
+                        The survey can be found at: www.cyclinguk.org/offroad-survey. Every person who completes the survey will also be automatically entered into a prize draw to win an iPad mini.",
+                  date: new DateTime(2016, 07, 24, 17, 53, 48),
+                  authorUsername: "geshu@gmail.com",
+                  description: "Cycling UK hopes to improve access rights for mountain bikers in England and Wales (Andy McCandlish).The popularity of " +
+                               "mountain biking has exploded in the UK in recent years but little has been done to improve or clarify cyclists‚Äô access arrangements " +
+                               "to off-road paths and trails.",
+                   tag: new List<Tag>()
+                  {
+                        Route, News
+                  },
+                  comment: new List<Comment>()
+                  {
+                        new Comment(4, "i'd love so much for footpaths and more pathways to be opened up, as most of the local roads are small with trucks, and people speeding and cutting corners, and it's annoying, as by me there's more footpaths than bridleways, and being allowed to ride on footpaths would open up around 100 miles of extra tracks to ride, and give direct routes to woods which have some trails.",
+                        context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
+                        new Comment(4, "I think this is people returning to cycling after many years & finding the roads too busy and dangerous. Especially country roads. After 6 months I left the A4 and headed for muddy bridleways and single track footpaths. I do 2x8miles twice per week to keep fit. The off-road world includes ramblers, dog walkers, cows \'n\' sheep, horse riders & other cyclists. On seeing any of these you must slow down because their behaviour is unpredictable. Apart from having to remain vigilant for these hazards it is better than being on the road. I use daytime front and rear LED lights, and a bell, so they can see & hear me coming.\r\n\r\nRecreational cyclists should be encouraged to leave the tarmac and the funerals behind. There have been too many of them. If you have to cycle to work then use the road - otherwise stick to the footpaths & bridleways - it is a different less confrontational kind of cycling.",
+                        context.Users.FirstOrDefault(u => u.UserName == "pesho@gmail.com"))
+                  },
+                  category: Mountain,
+                  postPicture: mtbPic
+              );
 
                 CreatePost(context,
-                   title: "Atom Text Editor Gets New Windows Features",
-                   body: @"<p>GitHub has released <b>Atom 1.7</b>, and the updated version of the text editor offers improvements for Windows developers. Specifically, it is now easier to build in Visual Studio, and it now supports the Appveyor CI continuous integration service for Windows.</p>
-                    <p>Other new features include improved tab switching, tree view and crash recovery. GitHub noted, ""Crashes are nobody''s idea of fun, but in case Atom does crash on you, it periodically saves your editor state. After relaunching Atom after a crash, you should find all your work saved and ready to go.""</p>
-                    <p>GitHub has also released a beta preview of Atom 1.8.</p>",
-                   date: new DateTime(2016, 03, 27, 17, 53, 48),
-                   authorUsername: "merry@gmail.com",
-                     description: "GitHub has released <b>Atom 1.7</b>, and the updated version of the text editor offers improvements for Windows developers. Specifically, it is now easier to build in Visual Studio," +
-                                  "and it now supports the Appveyor CI continuous integration service for Windows.",
-                    tag: new List<Tag>()
-                    {
-                        new Tag("GitHub"),
-                        tag
-                    },
-                    comment: new List<Comment>()
-                    {
-                        new Comment(3, "First GitHub comment", context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
-                        new Comment(3, "Second GitHub comment")
-                    },
-                    category: category2
-               );
+                  title: "WIGGINS ON TRACK FOR RECORD MEDAL HAUL",
+                  body: @"Wiggins will compete in the men‚Äôs team pursuit and can become the first British athlete to win eight Olympic medals. He has won six track cycling medals, including three golds, and a gold medal in the road cycling time trial, but Australia, New Zealand and Denmark all bring strong pursuiting squads to Rio 2016.
+                        Led by Wiggins and now-retired Chris Hoy, the Great Britain team emerged as track cycling‚Äôs dominant force in 2008, and have won seven gold medals at each of the past two Olympic Games. The British will be the team to beat as men and women each race for five gold medals in three sprint events (sprint, team sprint and keirin) and two endurance events (team pursuit and omnium).",
+                  date: new DateTime(2016, 07, 24, 17, 53, 48),
+                  authorUsername: "geshu@gmail.com",
+                  description: "BRADLEY WIGGINS CAN CLAIM A RECORD EIGHTH OLYMPIC MEDAL BUT GREAT BRITAIN‚ÄôS EIGHT-YEAR DOMINANCE OF OLYMPIC TRACK CYCLING FACES A STIFF CHALLENGE WHEN COMPETITION BEGINS AT THE NEW RIO OLYMPIC VELODROME ON 11 AUGUST.",
+                   tag: new List<Tag>()
+                  {
+                        Olympic, News
+                  },
+                  comment: new List<Comment>()
+                  {
+                        new Comment(5, "i'd love so much for footpaths and more pathways to be opened up, as most of the local roads are small with trucks, and people speeding and cutting corners, and it's annoying, as by me there's more footpaths than bridleways, and being allowed to ride on footpaths would open up around 100 miles of extra tracks to ride, and give direct routes to woods which have some trails.",
+                        context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
+                        new Comment(5, "I think this is people returning to cycling after many years & finding the roads too busy and dangerous. Especially country roads. After 6 months I left the A4 and headed for muddy bridleways and single track footpaths. I do 2x8miles twice per week to keep fit. The off-road world includes ramblers, dog walkers, cows \'n\' sheep, horse riders & other cyclists. On seeing any of these you must slow down because their behaviour is unpredictable. Apart from having to remain vigilant for these hazards it is better than being on the road. I use daytime front and rear LED lights, and a bell, so they can see & hear me coming.\r\n\r\nRecreational cyclists should be encouraged to leave the tarmac and the funerals behind. There have been too many of them. If you have to cycle to work then use the road - otherwise stick to the footpaths & bridleways - it is a different less confrontational kind of cycling.",
+                        context.Users.FirstOrDefault(u => u.UserName == "pesho@gmail.com")),
+                        new Comment(5, "Loved this Giro - every minute of it, and such a great advert for the sport. But so so sad to to see that, on the final podium, only 1 of the 3 has no history of cheating. Still a long way to go.",
+                        context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
+                        new Comment(5, "Nibali wins. The time he took off Kruiswijk I can see; 53 seconds off Chaves on stage 19 and then a further 96 on stage 20 - there should be a very serious contract awaiting at Team Bahrain (or what ever the name is to be). Another problem for Vino's in box then... Does seem odd that a man who can do this would have done that thing that got him disqualified from the Vuelta.",
+                        context.Users.FirstOrDefault(u => u.UserName == "pesho@gmail.com")),
+                        new Comment(5, "So Froome, Wiggins and Sky generally have to constantly answer questions and allegations about doping and Nibali is beyond suspicion? When his own team are blood testing him due to his lack of performance, then a day or two later it's the greatest comeback since Lazarus..... Surely even the most one eyed Nibali fan can see why questions might arise given the sports past (let alone the connections to Astana and Vino).",
+                        context.Users.FirstOrDefault(u => u.UserName == "geshu@gmail.com")),
+                        new Comment(5, "Can't feel good about the final result. From nowhere and done to winner... who trusts Astana? who trusts individual cyclists when- pride, money and.. money are at stake Who therefore trusts cycling, certainly not me after this result."
+                        , context.Users.FirstOrDefault(u => u.UserName == "admin@gmail.com")),
+                        new Comment(5, "Loved this Giro - every minute of it, and such a great advert for the sport. But so so sad to to see that, on the final podium, only 1 of the 3 has no history of cheating. Still a long way to go.",
+                        context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
+                        new Comment(5, "Nibali wins. The time he took off Kruiswijk I can see; 53 seconds off Chaves on stage 19 and then a further 96 on stage 20 - there should be a very serious contract awaiting at Team Bahrain (or what ever the name is to be). Another problem for Vino's in box then... Does seem odd that a man who can do this would have done that thing that got him disqualified from the Vuelta.",
+                        context.Users.FirstOrDefault(u => u.UserName == "pesho@gmail.com")),
+                        new Comment(5, "So Froome, Wiggins and Sky generally have to constantly answer questions and allegations about doping and Nibali is beyond suspicion? When his own team are blood testing him due to his lack of performance, then a day or two later it's the greatest comeback since Lazarus..... Surely even the most one eyed Nibali fan can see why questions might arise given the sports past (let alone the connections to Astana and Vino).",
+                        context.Users.FirstOrDefault(u => u.UserName == "geshu@gmail.com")),
+                        new Comment(5, "Can't feel good about the final result. From nowhere and done to winner... who trusts Astana? who trusts individual cyclists when- pride, money and.. money are at stake Who therefore trusts cycling, certainly not me after this result."
+                        , context.Users.FirstOrDefault(u => u.UserName == "admin@gmail.com")),
+                        new Comment(5, "Loved this Giro - every minute of it, and such a great advert for the sport. But so so sad to to see that, on the final podium, only 1 of the 3 has no history of cheating. Still a long way to go.",
+                        context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
+                        new Comment(5, "Nibali wins. The time he took off Kruiswijk I can see; 53 seconds off Chaves on stage 19 and then a further 96 on stage 20 - there should be a very serious contract awaiting at Team Bahrain (or what ever the name is to be). Another problem for Vino's in box then... Does seem odd that a man who can do this would have done that thing that got him disqualified from the Vuelta.",
+                        context.Users.FirstOrDefault(u => u.UserName == "pesho@gmail.com")),
+                        new Comment(5, "So Froome, Wiggins and Sky generally have to constantly answer questions and allegations about doping and Nibali is beyond suspicion? When his own team are blood testing him due to his lack of performance, then a day or two later it's the greatest comeback since Lazarus..... Surely even the most one eyed Nibali fan can see why questions might arise given the sports past (let alone the connections to Astana and Vino).",
+                        context.Users.FirstOrDefault(u => u.UserName == "geshu@gmail.com")),
+                        new Comment(5, "Can't feel good about the final result. From nowhere and done to winner... who trusts Astana? who trusts individual cyclists when- pride, money and.. money are at stake Who therefore trusts cycling, certainly not me after this result."
+                        , context.Users.FirstOrDefault(u => u.UserName == "admin@gmail.com"))
 
-                CreatePost(context,
-                   title: "SoftUni 3.0 Just Launched",
-                   body: @"<p>The <b>Software University (SoftUni)</b> launched a new training methodology and training program for software engineers in Sofia.</p>
-                    <p>It is a big step ahead. Now SoftUni offers several professions:</p>
-                    <ul>
-                      <li>PHP Developer</li>
-                      <li>JavaScript Developer</li>
-                      <li>C# Web Developer</li>
-                      <li>Java Web Developer</li>
-                    </ul>",
-                   date: new DateTime(2016, 02, 18, 22, 14, 38),
-                   authorUsername: "pesho@gmail.com",
-                   description: "The Software University (SoftUni)" +
-                                "launched a new training methodology and training program for software engineers in Sofia.",
-                    tag: new List<Tag>()
-                    {
-                        new Tag("SoftUni"),
-                        tag
-                    },
-                    comment: new List<Comment>()
-                    {
-                        new Comment(4, "First SoftUni comment", context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
-                        new Comment(4, "Second SoftUni comment")
-                    },
-                    category: category1
-               );
-
-                CreatePost(context,
-                    title: "Git 2.8 Adds Security and Productivity Features",
-                    body: @"<p>Version 2.8 of the open-source distributed version-control system Git has been released. The new edition provides a variety of new features, bugfixes and other improvements.</p>
-                    <p>According to GitHub, the most notable new features include:</p>
-                    <ul>
-                    <li><strong>Parallel fetches of submodules:</strong> ìUsing ëgit submodules,í one Git repository can include other Git repositories as subdirectories. This can be a useful way to include libraries or other external dependencies into your main project. The top-level repository specifies which submodules it wants to include, and which version of each submodule,î wrote Jeff King, a Git team member, in a <a href=""https://github.com/blog/2131-git-2-8-has-been-released"">blog post</a>. According to him, if users have multiple submodules, fetches can be time-consuming. The latest release allows users to fetch from multiple submodules in parallel.</li>
-                    <li><strong>Donít guess my identity: </strong>Instead of using one e-mail address for all of a userís open-source projects, they can now tell Git what user name and e-mail they want to use before they commit.</li>
-                    <li><strong>Convergences with Git for Windows:</strong> The Git team has been working on making Git as easy to work with on Windows as it is on Linux and OS X. The latest release includes Git commands rewritten in C; Windows-specific changes from the Git for Windows project; and the ability to accept both LF and CRLF line endings. ìThis continuing effort will make it easier to keep the functionality of Git in sync across platforms as new features are added,î King wrote.</li>
-                    <li><strong>Security fixes: </strong>Git 2.8 addresses the vulnerability CVE-2016-2324. There have not been any reported exploits, but the vulnerability could execute arbitrary code when cloning a malicious repository, according to King.</li>
-                    </ul>
-                    <p>Other features include the ability to turn off Gitís clean and smudge filters; the ability to see where a particular setting came from; the ability to easily diagnose end-of-line problems; the ability to see a remote repositoryís default branch; and support for cloning via the rsync protocol has been dropped.</p>
-                    <p>The full release notes are available <a href=""https://github.com/git/git/blob/v2.8.0/Documentation/RelNotes/2.8.0.txt"">here</a>.</p>",
-                    date: new DateTime(2016, 04, 11, 19, 02, 05),
-                    authorUsername: "geshu@gmail.com",
-                     description: "Version 2.8 of the open-source distributed version-control system Git has been released. The new edition provides a variety of new features, bugfixes and other improvements.",
-                    tag: new List<Tag>()
-                    {
-                        new Tag("GitHub"),
-                        tag
-                    },
-                    comment: new List<Comment>()
-                    {
-                        new Comment(1, "First Git comment", context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
-                        new Comment(1, "Second Git comment")
-                    },
-                    category: category1
-                );
-
-                CreatePost(context,
-                   title: "Rogue Wave Updates Zend Framework",
-                   body: @"<p>Rogue Wave is updating its open-source framework for developing Web applications and services. According to the company, this is the first major release in four years. Zend Framework 3 features support for PHP 7, middleware runtime and performance enhancements.</p>
-                    <p>The newly released support for PHP 7 aims to simplify how developers create, debug, monitor and deploy modern Web and mobile apps in PHP 7. ìThis is an exciting time to be a PHP developer,î said Zeev Suraski, cofounder of Zend and CTO of Rogue Wave. ìWith Zend Framework 3, weíre continuing our quest to make creating PHP applications simpler, more accessible and faster.î</p>
-                    <p>In addition, version 3 of the framework features an architectural structure that allows developers to use components within Zend Framework apps or any other framework in order to reduce dependencies, and to enable reuse within the PHP ecosystem.</p>
-                    <p>Another key update to the solution is a new middleware runtime. Expressive is designed to focus on simplicity and interoperability, and it enables developers to customize their solutions.</p>
-                    <p>ìIím extremely proud of the work weíve done with Expressive,î said Matthew Weier OíPhinney, principal engineer and Zend Framework project lead at Rogue Wave. ìExpressive signals the future of PHP applications, composed of layered, single-purpose PSR-7 middleware.î</p>",
-                   date: new DateTime(2016, 06, 30, 17, 36, 52),
-                   authorUsername: "merry@gmail.com",
-                    description: "Rogue Wave is updating its open-source framework for developing Web applications and services.",
-                    tag: new List<Tag>()
-                    {
-                        new Tag("RogueWave"),
-                        tag
-                    },
-                    comment: new List<Comment>()
-                    {
-                        new Comment(1, "First Rogue comment", context.Users.FirstOrDefault(u => u.UserName == "merry@gmail.com")),
-                        new Comment(1, "Second Rogue comment")
-                    }, 
-                    category: category1
-               );
-
+                  },
+                  category: Track,
+                  postPicture: null
+              );
 
                 context.SaveChanges();
             }
         }
 
         private void CreateUser(ApplicationDbContext context,
-            string email, string password, string fullName)
+            string email, string password, string fullName, byte[] profilePicture)
         {
             var userManager = new UserManager<ApplicationUser>(
                 new UserStore<ApplicationUser>(context));
@@ -208,8 +274,8 @@ namespace SimpleForum.Migrations
                 Email = email,
                 FullName = fullName
             };
-
-            var userCreateResult = userManager.Create(user, password);
+            user.ProfilePicture = profilePicture;
+          var userCreateResult = userManager.Create(user, password);
             if (!userCreateResult.Succeeded)
             {
                 throw new Exception(string.Join("; ", userCreateResult.Errors));
@@ -240,7 +306,7 @@ namespace SimpleForum.Migrations
         }
 
         private void CreatePost(ApplicationDbContext context,
-            string title, string body, DateTime date, string authorUsername, string description, List<Tag> tag, List<Comment> comment,Category category)
+            string title, string body, DateTime date, string authorUsername, string description, List<Tag> tag, List<Comment> comment, Category category, byte[] postPicture)
         {
             var post = new Post();
             post.Title = title;
@@ -251,9 +317,18 @@ namespace SimpleForum.Migrations
             post.Tags = tag;
             post.Comment = comment;
             post.Category = category;
+            post.PostPicture = postPicture;
             context.Posts.Add(post);
         }
 
+        private byte[] imgToByteArray(Image img)
+        {
+            using (MemoryStream mStream = new MemoryStream())
+            {
+                img.Save(mStream, img.RawFormat);
+                return mStream.ToArray();
+            }
+        }
 
 
 

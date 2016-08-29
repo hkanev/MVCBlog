@@ -157,7 +157,7 @@ namespace SimpleForum.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = model.FullName};
 
                 Image img = Image.FromFile(" F:\\Software Technologies\\Projects\\ArrayTest\\ArrayTest\\avatar3.png");
                 byte[] defaultPicture = imgToByteArray(img);

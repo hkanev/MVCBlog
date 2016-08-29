@@ -7,8 +7,9 @@
 <hr />
 <ol class="breadcrumb">
     <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.ActionLink("ChangePicture", "SetPicture", "Posts", new { id = Model.Post.Id }, null)</li>
     <li>@Html.ActionLink("Reply", "Create", "Comments", new { id = Model.Post.Id }, null)</li>
-    <li>@Html.ActionLink("New post", "Create", "Posts", new { id = Model.Post.Category.Id }, null)</li>
+    <li>@Html.ActionLink("New post", "Create", "Posts")</li>
 </ol>
 <hr />
 <section id="blog" class="container-fluid">
@@ -35,7 +36,11 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-10 blog-content">
-                            <h2>@Html.ActionLink(Model.Post.Title, "Details", "Posts", new { id = Model.Post.Id }, null)</h2>
+                            @if (Model.Post.PostPicture != null)
+                            {
+                                <img src="@Url.Action("Photo", "Posts", new {id = Model.Post.Id}, null)" width="100%" />
+                            }
+                            <h2>@Html.ActionLink(Model.Post.Title, "Details", "Posts", new {id = Model.Post.Id}, null)</h2>
                             <h3>@Html.Raw(Model.Post.Body)</h3>
                             <div class="post-tags">
                                 @foreach (var tag in Model.Post.Tags)
@@ -52,7 +57,14 @@
                 {
                     <div class="media comment_section">
                         <div class="pull-left post_comments">
-                            <a href="#"><img src="~/Content/avatar3.png" class="img-circle" alt="" /></a>
+                            @if (comment.Author != null && comment.Author.ProfilePicture != null)
+                            {
+                                <img src="@Url.Action("Photo", "Home", new {UserId = comment.Author.Id})" height="60" width="60" class="media-left" />
+                            }
+                            else
+                            {
+                                <img src="~/Content/avatar3.png" height="60" width="60" />
+                            }
                         </div>
                         <div class="media-body post_reply_comments">
                             <h3>
@@ -79,40 +91,44 @@
                 <div class="widget categories">
                     <h3>Recent Comments</h3>
                     <div class="row">
-                        <div class="col-sm-12">
-                            <div class="single_comments">
-                                @foreach (var comment in Model.Comments)
-                                {
-                                    if (comment.Author != null && comment.Author.ProfilePicture != null)
+                        <div class="single_comments">
+                            @foreach (var comment in Model.CommentAside)
+                            {
+                                <div class="col-sm-2">
+                                    @if (comment.Author != null && comment.Author.ProfilePicture != null)
                                     {
-                                        <img src="@Url.Action("Photo", "Home" , new { UserId=comment.Author.Id })" height="60" width="60" />
+                                        <img src="@Url.Action("Photo", "Home", new {UserId = comment.Author.Id})" height="60" width="60" class="media-left" />
                                     }
                                     else
                                     {
                                         <img src="~/Content/avatar3.png" height="60" width="60" />
                                     }
-                                    @Utils.CutText(comment.Content, 35)
+                                </div>
+                                <div class="col-sm-10">
+                                    <p>@Utils.CutText(comment.Content, 35)</p>
                                     <div class="entry-meta small muted">
                                         <span>
                                             By
                                             @if (comment.Author != null)
                                             {
                                                 @comment.Author.FullName
-                                                ;
                                             }
                                             else
                                             {
                                                 @:Anonnymous
-                                            }
+                                                }
                                         </span>
                                         <span>
-                                            On @Html.ActionLink(Utils.CutText(comment.Post.Title, 25),
-                                                   "Details", "Posts", new { id = comment.Post.Id }, null)
+                                            <p>
+                                                On @Html.ActionLink(Utils.CutText(comment.Post.Title, 30),
+                                                           "Details", "Posts", new { id = comment.Post.Id }, null)
+                                            </p>
                                         </span>
                                     </div>
-                                }
-                            </div>
+                                </div>
+                            }
                         </div>
+
                     </div>
                 </div><!--/.recent comments-->
 
@@ -146,8 +162,6 @@
                         }
                     </ul>
                 </div><!--/.tags-->
-
-
             </aside>
         </div><!--/.row-->
     </div>

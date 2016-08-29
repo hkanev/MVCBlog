@@ -8,6 +8,7 @@
 <hr />
 <ol class="breadcrumb">
     <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.ActionLink("New post", "Create", "Posts")</li>
 </ol>
 <hr />
 <section id="blog" class="container-fluid">
@@ -24,72 +25,77 @@
                                     <span>
                                         @if (post.Author != null)
                                         {
-                                            @: @post.Author.FullName
+                                            @: <strong>@post.Author.FullName</strong>
                                     }
                                         else
                                         {
-                                            @:Annonymous
+                                            @: <strong>Annonymous</strong>
                                     }
                                     </span>
-                                    <span>@post.Comment.Count Comments</span>
-                                    <span>56 Views</span>
+                                    <span><strong>@post.Comment.Count Comments</strong></span>
+                                    <span><strong>56 Views</strong></span>
                                 </div>
                             </div>
-
                             <div class="col-xs-12 col-sm-10 blog-content">
-
-                                <h2>@post.Title</h2>
+                                @if (post.PostPicture != null)
+                                {
+                                    <img src="@Url.Action("Photo", "Posts", new {id = post.Id}, null)" width="100%" />
+                                }
+                                <h2>@Html.ActionLink((string)post.Title, "Details", "Posts", new { id = post.Id }, null)</h2>
                                 <h3>@Html.Raw(post.Description)</h3>
                             </div>
-                            </div>
                         </div>
-                   
+                    </div>
+
                     <!--/.blog-item-->
                 }
                 <div class="pager">
                     @Html.PagedListPager((IPagedList)ViewBag.onePageOfPosts, page => Url.Action("Index", new { page }))
                 </div>
-                    
-                </div><!--/.col-md-8-->
+
+            </div><!--/.col-md-8-->
 
             <aside class="col-md-4">
 
                 <div class="widget categories">
                     <h3>Recent Comments</h3>
                     <div class="row">
-                        <div class="col-sm-12">
-                            <div class="single_comments">
-                                @foreach (var comment in Model.Comments)
-                                {
-                                    if (comment.Author != null && comment.Author.ProfilePicture != null)
+                        <div class="single_comments">
+                            @foreach (var comment in Model.Comments)
+                            {
+                                <div class="col-sm-2">
+                                    @if (comment.Author != null && comment.Author.ProfilePicture != null)
                                     {
-                                        <img src="@Url.Action("Photo", "Home" , new { UserId=comment.Author.Id })" height="60" width="60" />
+                                    <img src="@Url.Action("Photo", "Home", new {UserId = comment.Author.Id})" height="60" width="60" class="media-left" />
                                     }
                                     else
                                     {
-                                        <img src="~/Content/avatar3.png" height="60" width="60"/>
+                                    <img src="~/Content/avatar3.png" height="60" width="60" />
                                     }
-                                    @Utils.CutText(comment.Content, 35)
-                                    <div class="entry-meta small muted">
-                                        <span>
-                                            By
-                                            @if (comment.Author != null)
-                                            {
-                                                @comment.Author.FullName
-                                                ;
-                                            }
-                                            else
-                                            {
-                                                @:Anonnymous 
-                                            }
-                                          </span>
-                                        <span>
-                                            On @Html.ActionLink(Utils.CutText(comment.Post.Title, 25),
-                                                   "Details", "Posts", new {id = comment.Post.Id}, null)
-                                        </span>
+                                </div>
+                                    <div class="col-sm-10">
+                                        <p>@Utils.CutText(comment.Content, 35)</p>
+                                        <div class="entry-meta small muted">
+                                            <span>
+                                                By
+                                                @if (comment.Author != null)
+                                                {
+                                                    @comment.Author.FullName
+                                                }
+                                                else
+                                                {
+                                                    @:Anonnymous
+                                                }
+                                            </span>
+                                            <span>
+                                                <p>
+                                                    On @Html.ActionLink(Utils.CutText(comment.Post.Title, 30),
+                                                           "Details", "Posts", new { id = comment.Post.Id }, null)
+                                                </p>
+                                            </span>
+                                        </div>
                                     </div>
                                 }
-                            </div>
                         </div>
                     </div>
                 </div><!--/.recent comments-->
@@ -101,8 +107,10 @@
                             <ul class="blog_category">
                                 @foreach (var category in Model.Categories)
                                 {
-                                    <li>@Html.ActionLink(category.Name, "Details", "Category", new { id = category.Id }, null)
-                                <span class="badge">@category.Posts.Count</span>   </li>
+                                    <li>
+                                        @Html.ActionLink(category.Name, "Details", "Category", new { id = category.Id }, null)
+                                    <span class="badge">@category.Posts.Count</span>
+                                </li>
                                 }
                             </ul>
                         </div>
@@ -116,9 +124,9 @@
                         @foreach (var tag in Model.Tags)
                         {
                             <li>
-                                @Html.ActionLink(tag.Name, "Details", "Tags", new { id = tag.Id }, new {@class="btn btn-xs btn-primary"})
-                               
-                                            </li>
+                                @Html.ActionLink(tag.Name, "Details", "Tags", new { id = tag.Id }, new { @class = "btn btn-xs btn-primary" })
+
+                            </li>
                         }
                     </ul>
                 </div><!--/.tags-->

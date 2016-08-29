@@ -247,6 +247,16 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\images\blog1.jpg" />
+    <Content Include="Content\images\gallery4.png" />
+    <Content Include="Content\images\Posts\Giro2016.jpg" />
+    <Content Include="Content\images\Posts\mtb-shreddin--1472210686521-10tgha8wnv9q4-700-80.jpg" />
+    <Content Include="Content\images\Posts\Tour2016.jpg" />
+    <Content Include="Content\images\Posts\Vauelta2015.jpg" />
+    <Content Include="Content\images\Users\man2.jpg" />
+    <Content Include="Content\images\Users\man3.jpg" />
+    <Content Include="Content\images\Users\man4.jpg" />
+    <Content Include="Content\images\Users\team-member.jpg" />
     <Content Include="Content\main.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\prettyPhoto.css" />
@@ -600,10 +610,10 @@
     <Content Include="Scripts\tinymce\langs\readme.md" />
     <Content Include="Views\Shared\EditorTemplates\tinymce_full_compressed.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\tinymce_full.cshtml" />
+    <Content Include="Views\Posts\SetPicture.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

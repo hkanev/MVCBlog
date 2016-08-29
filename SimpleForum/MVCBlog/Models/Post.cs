@@ -47,6 +47,8 @@ namespace SimpleForum.Models
 
         public Category Category { get; set; }
 
+        public byte[] PostPicture { get; set; }
+
         public virtual ICollection<Tag> Tags { get; set; }
 
         public virtual ICollection<Comment> Comment { get; set; }

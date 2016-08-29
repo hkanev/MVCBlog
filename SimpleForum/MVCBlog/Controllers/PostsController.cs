@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using SimpleForum.Models;
 using SimpleForum.Extensions;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using MVCBlog.Models;
 using PagedList;
 
@@ -40,7 +41,13 @@ namespace SimpleForum.Controllers
             var comments =
                 db.Comments.Include(c => c.Post).Where(c => c.PostId == postViewModel.Post.Id).ToList();
             postViewModel.Comments = comments;
+            var commentsAside =
+                db.Comments.ToList().OrderByDescending(t => t.Date).Take(5).ToList();
+            postViewModel.CommentAside = commentsAside;
             var categories = db.Categories.ToList();
+            postViewModel.Categories = categories;
+            var tags = db.Tags.OrderByDescending(t => t.Posts.Count).Take(9).ToList();
+            postViewModel.Tags = tags;
 
             if (postViewModel.Post == null)
             {
@@ -50,10 +57,51 @@ namespace SimpleForum.Controllers
 
             
             var pageNumber = page ?? 1;
-            var onePageOfComments = comments.ToPagedList(pageNumber, 10);
+            var onePageOfComments = comments.ToPagedList(pageNumber, 5);
             ViewBag.onePageOfComments = onePageOfComments;
 
             return View(postViewModel);
+        }
+
+        public FileContentResult Photo(int? id)
+        {
+            Post post = db.Posts.Find(id);
+
+            return new FileContentResult(post.PostPicture, "image/jpeg");
+            
+        }
+
+        [HttpGet]
+        public ActionResult SetPicture()
+        {
+            ViewBag.Message = "Update your profile";
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SetPicture(HttpPostedFileBase Profile, int? id)
+        {
+            if (id == null)
+            {
+                this.AddNotification("Post cant be found.", NotificationType.ERROR);
+                return RedirectToAction("Index");
+            }
+            Post post = db.Posts.Find(id);
+            if (post == null)
+            {
+                this.AddNotification("Post cant be found.", NotificationType.ERROR);
+                return RedirectToAction("Index");
+            } 
+
+            byte[] image = new byte[Profile.ContentLength];
+            Profile.InputStream.Read(image, 0, Convert.ToInt32(Profile.ContentLength));
+
+             post.PostPicture = image;
+
+            db.SaveChanges();
+
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Posts/Create
