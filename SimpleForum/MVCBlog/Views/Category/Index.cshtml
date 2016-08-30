@@ -5,38 +5,38 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table>
+<h2>Categories</h2>
+<table class="table">
     <tr>
         <th>
-            @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm })
+            Id
         </th>
         <th>
-            First Name
+            Name
         </th>
-        <th>
-            @Html.ActionLink("Enrollment Date", "Index", new { sortOrder = ViewBag.DateSortParm })
+        <th class="text-center">
+            Posts Count
         </th>
-        <th></th>
+        <th class="align-right">
+            Actions
+        </th>
     </tr>
-
     @foreach (var item in Model)
     {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new {id = item.Id}) |
-                @Html.ActionLink("Details", "Details", new {id = item.Id}) |
-                @Html.ActionLink("Delete", "Delete", new {id = item.Id})
-                @Html.ActionLink("Create post", "Create", "Posts", new {id = item.Id}, null)
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Posts.Count)
             </td>
-            <td>
+            <td class="align-right">
+                @Html.ActionLink("| Create |", "Create", "Category", new { id = item.Id }, null)
+                @Html.ActionLink("Edit |", "Edit", "Category", new { id = item.Id }, null)
+                @Html.ActionLink("Delete |", "Delete", "Category", new { id = item.Id }, null)
             </td>
         </tr>
     }

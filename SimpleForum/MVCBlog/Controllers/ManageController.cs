@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using SimpleForum.Extensions;
 using SimpleForum.Models;
 
 namespace SimpleForum.Controllers
@@ -78,30 +79,24 @@ namespace SimpleForum.Controllers
         [HttpGet]
         public ActionResult ChangePicture()
         {
-            ViewBag.Message = "Update your profile";
             return View();
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ChangePicture(HttpPostedFileBase Profile)
         {
-            // get EF Database (maybe different way in your applicaiton)
             var db = HttpContext.GetOwinContext().Get<ApplicationDbContext>();
-
-            // find the user. I am skipping validations and other checks.
+ 
             var userid = User.Identity.GetUserId();
-            var user = db.Users.Where(x => x.Id == userid).FirstOrDefault();
+            var user = db.Users.FirstOrDefault(x => x.Id == userid);
 
-            // convert image stream to byte array
             byte[] image = new byte[Profile.ContentLength];
             Profile.InputStream.Read(image, 0, Convert.ToInt32(Profile.ContentLength));
 
             user.ProfilePicture = image;
-
-            // save changes to database
             db.SaveChanges();
+            this.AddNotification("Picture changed.", NotificationType.INFO);
 
             return RedirectToAction("Index", "Home");
         }

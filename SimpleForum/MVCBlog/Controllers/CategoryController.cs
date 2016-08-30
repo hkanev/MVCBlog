@@ -19,21 +19,11 @@ namespace SimpleForum.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Categories
-        public ActionResult Index(string sortOrder)
+        [Authorize(Roles = "Administrators")]
+        public ActionResult Index()
         {
-            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            var category = from s in db.Categories
-                           select s;
-            switch (sortOrder)
-            {
-                case "name_desc":
-                    category = category.Where(c => c.Id==1);
-                    break;
-                default:
-                    category = category.OrderBy(s => s.Name);
-                    break;
-            }
-            return View(category.ToList());
+            var category = db.Categories.ToList();
+            return View(category);
         }
 
         // GET: Categories/Details/5
@@ -42,7 +32,7 @@ namespace SimpleForum.Controllers
             if (id == null)
             {
                 this.AddNotification("Category cant be found.", NotificationType.ERROR);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Home");
             }
 
             var blogViewModels = new BlogViewModels();
@@ -60,13 +50,14 @@ namespace SimpleForum.Controllers
             if (blogViewModels.Category == null)
             {
                 this.AddNotification("Category cant be found.", NotificationType.ERROR);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Home");
             }
 
             return View(blogViewModels);
         }
 
         // GET: Categories/Create
+        [Authorize(Roles = "Administrators")]
         public ActionResult Create()
         {
             return View();
@@ -77,29 +68,34 @@ namespace SimpleForum.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrators")]
         public ActionResult Create([Bind(Include = "Id,Name")] Category category)
         {
             if (ModelState.IsValid)
             {
                 db.Categories.Add(category);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                this.AddNotification("Category created", NotificationType.INFO);
+                return RedirectToAction("Index", "Home");
             }
 
             return View(category);
         }
 
         // GET: Categories/Edit/5
+        [Authorize(Roles = "Administrators")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                this.AddNotification("Category can not be found.", NotificationType.ERROR);
+                return RedirectToAction("Index", "Home");
             }
             Category category = db.Categories.Find(id);
             if (category == null)
             {
-                return HttpNotFound();
+                this.AddNotification("Category can not be found.", NotificationType.ERROR);
+                return RedirectToAction("Index", "Home");
             }
             return View(category);
         }
@@ -109,28 +105,33 @@ namespace SimpleForum.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrators")]
         public ActionResult Edit([Bind(Include = "Id,Name")] Category category)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(category).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                this.AddNotification("Category edited.", NotificationType.INFO);
+                return RedirectToAction("Index", "Home");
             }
             return View(category);
         }
 
         // GET: Categories/Delete/5
+        [Authorize(Roles = "Administrators")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                this.AddNotification("Category can not be found.", NotificationType.ERROR);
+                return RedirectToAction("Index", "Home");
             }
             Category category = db.Categories.Find(id);
             if (category == null)
             {
-                return HttpNotFound();
+                this.AddNotification("Category can not be found.", NotificationType.ERROR);
+                return RedirectToAction("Index", "Home");
             }
             return View(category);
         }
@@ -138,12 +139,14 @@ namespace SimpleForum.Controllers
         // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrators")]
         public ActionResult DeleteConfirmed(int id)
         {
             Category category = db.Categories.Find(id);
             db.Categories.Remove(category);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            this.AddNotification("Category deleted", NotificationType.INFO);
+            return RedirectToAction("Index", "Home");
         }
 
         protected override void Dispose(bool disposing)

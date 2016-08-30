@@ -7,9 +7,14 @@
 <hr />
 <ol class="breadcrumb">
     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-    <li>@Html.ActionLink("ChangePicture", "SetPicture", "Posts", new { id = Model.Post.Id }, null)</li>
     <li>@Html.ActionLink("Reply", "Create", "Comments", new { id = Model.Post.Id }, null)</li>
     <li>@Html.ActionLink("New post", "Create", "Posts")</li>
+    @if (User.IsInRole("Administrators") || User.Identity.Name == Model.Post.Author.UserName)
+    {
+        <li>@Html.ActionLink("ChangePicture", "SetPicture", "Posts", new { id = Model.Post.Id }, null)</li>
+        <li>@Html.ActionLink("Edit", "Edit", "Posts", new { id = Model.Post.Id }, null)</li>
+        <li>@Html.ActionLink("Delete", "Delete", "Posts", new { id = Model.Post.Id }, null)</li>
+    }
 </ol>
 <hr />
 <section id="blog" class="container-fluid">
@@ -45,7 +50,8 @@
                             <div class="post-tags">
                                 @foreach (var tag in Model.Post.Tags)
                                 {
-                                    <span class="badge-default1">@tag.Name</span>
+                                   
+                                    <span>@Html.ActionLink(tag.Name, "Details", "Tags", new { id = tag.Id }, new { @class="badge-default1" })</span>
                                 }
                             </div>
                         </div>

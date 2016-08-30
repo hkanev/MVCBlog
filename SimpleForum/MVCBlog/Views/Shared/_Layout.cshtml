@@ -30,9 +30,11 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Posts", "Index", "Posts")</li>
                     <li>@Html.ActionLink("New Post", "Create", "Posts")</li>
-                    <li>@Html.ActionLink("New Comment", "Create", "Comments")</li>
+                    @if (User.IsInRole("Administrators"))
+                    {
+                        <li>@Html.ActionLink("Admin panel", "Index", "Admin")</li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

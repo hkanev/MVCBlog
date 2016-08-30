@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using SimpleForum.Extensions;
 using SimpleForum.Models;
 
 namespace SimpleForum.Controllers
@@ -14,6 +15,7 @@ namespace SimpleForum.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        [Authorize(Roles = "Administrators")]
         // GET: Comments
         public ActionResult Index()
         {   
@@ -21,6 +23,7 @@ namespace SimpleForum.Controllers
             return View(comments.ToList());
         }
 
+        [Authorize(Roles = "Administrators")]
         // GET: Comments/Details/5
         public ActionResult Details(int? id)
         {
@@ -28,25 +31,28 @@ namespace SimpleForum.Controllers
             ViewBag.Authors = authors;
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                this.AddNotification("Comment can not be found.", NotificationType.ERROR);
+                return RedirectToAction("Index", "Home");
             }
             Comment comment = db.Comments.Find(id);
             if (comment == null)
             {
-                return HttpNotFound();
+                this.AddNotification("Comment can not be found.", NotificationType.ERROR);
+                return RedirectToAction("Index", "Home");
             }
             return View(comment);
         }
 
+        [Authorize]
         // GET: Comments/Create
         public ActionResult Create()
         {
-           
             return View();
         }
     
     
-
+        
+        [Authorize]
         // POST: Comments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -56,12 +62,14 @@ namespace SimpleForum.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                this.AddNotification("Post can not be found.", NotificationType.ERROR);
+                return RedirectToAction("Index", "Home");
             }
             Post post = db.Posts.Find(id);
             if (post == null)
             {
-                return HttpNotFound();
+                this.AddNotification("Post can not be found.", NotificationType.ERROR);
+                return RedirectToAction("Index", "Home");
             }
 
             if (ModelState.IsValid)
@@ -70,26 +78,35 @@ namespace SimpleForum.Controllers
                 comment.Author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
                 db.Comments.Add(comment);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                this.AddNotification("Comment created", NotificationType.INFO);
+                return RedirectToAction("Details", "Posts", new {id = post.Id});
             }
            
             return View(comment);
         }
 
+        [Authorize]
         // GET: Comments/Edit/5
         public ActionResult Edit(int? id)
-        {
+        {   
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                this.AddNotification("Comment can not be found.", NotificationType.ERROR);
+                return RedirectToAction("Index", "Home");
             }
-            Comment comment = db.Comments.Find(id);
+            var comment = db.Comments.Include(p => p.Author).FirstOrDefault(p => p.Id == id);
             if (comment == null)
             {
-                return HttpNotFound();
+                this.AddNotification("Comment can not be found.", NotificationType.ERROR);
+                return RedirectToAction("Index","Home");
             }
-            ViewBag.PostId = new SelectList(db.Posts, "Id", "Title", comment.PostId);
-            return View(comment);
+            if (User.IsInRole("Administrators") || User.Identity.Name == comment.Author.UserName)
+            {
+                ViewBag.PostId = new SelectList(db.Posts, "Id", "Title", comment.PostId);
+                return View(comment);
+            }
+            this.AddNotification("You are not authorized.", NotificationType.ERROR);
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Comments/Edit/5
@@ -99,14 +116,21 @@ namespace SimpleForum.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Content,PostId")] Comment comment)
         {
-            if (ModelState.IsValid)
+            if (User.IsInRole("Administrators") || User.Identity.Name == comment.Author.UserName)
             {
-                db.Entry(comment).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+
+                    db.Entry(comment).State = EntityState.Modified;
+                    db.SaveChanges();
+                    this.AddNotification("Comment edited", NotificationType.INFO);
+                    return RedirectToAction("Index","Home");
+                }
+                ViewBag.PostId = new SelectList(db.Posts, "Id", "Title", comment.PostId);
+                return View(comment);
             }
-            ViewBag.PostId = new SelectList(db.Posts, "Id", "Title", comment.PostId);
-            return View(comment);
+            this.AddNotification("You are not authorized.", NotificationType.ERROR);
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Comments/Delete/5
@@ -114,14 +138,21 @@ namespace SimpleForum.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                this.AddNotification("Comment can not be found.", NotificationType.ERROR);
+                return RedirectToAction("Index", "Home");
             }
-            Comment comment = db.Comments.Find(id);
+            var comment = db.Comments.Include(p => p.Author).FirstOrDefault(p => p.Id == id);
             if (comment == null)
             {
-                return HttpNotFound();
+                this.AddNotification("Comment can not be found.", NotificationType.ERROR);
+                return RedirectToAction("Index", "Home");
             }
-            return View(comment);
+            if (User.IsInRole("Administrators") || User.Identity.Name == comment.Author.UserName)
+            {
+                return View(comment);
+            }
+            this.AddNotification("You are not authorized.", NotificationType.ERROR);
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Comments/Delete/5
@@ -129,10 +160,16 @@ namespace SimpleForum.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Comment comment = db.Comments.Find(id);
-            db.Comments.Remove(comment);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            var comment = db.Comments.Include(p => p.Author).FirstOrDefault(p => p.Id == id);
+            if (User.IsInRole("Administrators") || User.Identity.Name == comment.Author.UserName)
+            {
+                db.Comments.Remove(comment);
+                db.SaveChanges();
+                this.AddNotification("Comment deleted", NotificationType.INFO);
+                return RedirectToAction("Index", "Home");
+            }
+            this.AddNotification("You are not authorized.", NotificationType.ERROR);
+            return RedirectToAction("Index", "Home");
         }
 
         protected override void Dispose(bool disposing)

@@ -22,9 +22,10 @@ namespace SimpleForum.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Posts
+        [Authorize(Roles = "Administrators")]
         public ActionResult Index()
         {
-            var post = db.Posts.Include(p => p.Author).ToList();
+            var post = db.Posts.Include(p => p.Author).Include(p => p.Category).ToList();
             return View(post);
         }
 
@@ -34,10 +35,10 @@ namespace SimpleForum.Controllers
             if (id == null)
             {
                 this.AddNotification("Post cant be found.", NotificationType.ERROR);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Home");
             }
             var postViewModel = new PostViewModel();
-            postViewModel.Post = db.Posts.Find(id);
+            postViewModel.Post = db.Posts.Include(p => p.Author).FirstOrDefault(p => p.Id == id);
             var comments =
                 db.Comments.Include(c => c.Post).Where(c => c.PostId == postViewModel.Post.Id).ToList();
             postViewModel.Comments = comments;
@@ -52,7 +53,7 @@ namespace SimpleForum.Controllers
             if (postViewModel.Post == null)
             {
                 this.AddNotification("Post cant be found.", NotificationType.ERROR);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Home");
             }
 
             
@@ -71,13 +72,30 @@ namespace SimpleForum.Controllers
             
         }
 
+        [Authorize]
         [HttpGet]
-        public ActionResult SetPicture()
+        public ActionResult SetPicture(int? id)
         {
-            ViewBag.Message = "Update your profile";
-            return View();
+            if (id == null)
+            {
+                this.AddNotification("Post cant be found.", NotificationType.ERROR);
+                return RedirectToAction("Index", "Home");
+            }
+            Post post = db.Posts.Include(p => p.Author).FirstOrDefault(p => p.Id == id);
+            if (post == null)
+            {
+                this.AddNotification("Post cant be found.", NotificationType.ERROR);
+                return RedirectToAction("Index", "Home");
+            }
+            if (User.IsInRole("Administrators") || User.Identity.Name == post.Author.UserName)
+            {
+                return View();
+            }
+            this.AddNotification("You are not authorized.", NotificationType.ERROR);
+            return RedirectToAction("Index", "Home");
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult SetPicture(HttpPostedFileBase Profile, int? id)
@@ -85,24 +103,25 @@ namespace SimpleForum.Controllers
             if (id == null)
             {
                 this.AddNotification("Post cant be found.", NotificationType.ERROR);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Home");
             }
-            Post post = db.Posts.Find(id);
+            Post post = db.Posts.Include(p => p.Author).FirstOrDefault(p => p.Id == id);
             if (post == null)
             {
                 this.AddNotification("Post cant be found.", NotificationType.ERROR);
-                return RedirectToAction("Index");
-            } 
-
-            byte[] image = new byte[Profile.ContentLength];
-            Profile.InputStream.Read(image, 0, Convert.ToInt32(Profile.ContentLength));
-
-             post.PostPicture = image;
-
-            db.SaveChanges();
-
+                return RedirectToAction("Index","Home");
+            }
+            if (User.IsInRole("Administrators") || User.Identity.Name == post.Author.UserName)
+            {
+                byte[] image = new byte[Profile.ContentLength];
+                Profile.InputStream.Read(image, 0, Convert.ToInt32(Profile.ContentLength));
+                post.PostPicture = image;
+                db.SaveChanges();
+                return RedirectToAction("Index", "Home");
+            }
+            this.AddNotification("You are not authorized.", NotificationType.ERROR);
             return RedirectToAction("Index", "Home");
-        }
+            }
 
         // GET: Posts/Create
         [Authorize]
@@ -141,7 +160,7 @@ namespace SimpleForum.Controllers
                 db.Posts.Add(post);
                 db.SaveChanges();
                 this.AddNotification("Post created", NotificationType.INFO);
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Posts", new { id = post.Id });
             }
 
 
@@ -155,18 +174,24 @@ namespace SimpleForum.Controllers
             if (id == null)
             {
                 this.AddNotification("Post cant be found.", NotificationType.ERROR);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Home");
             }
-            Post post = db.Posts.Find(id);
+
+            Post post = db.Posts.Include(p => p.Author).FirstOrDefault(p => p.Id == id);
             if (post == null)
             {
                 this.AddNotification("Post cant be found.", NotificationType.ERROR);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Home");
             }
-
-            var authors = db.Users.ToList();
-            ViewBag.Authors = authors;
-            return View(post);
+            if (User.IsInRole("Administrators") || User.Identity.Name == post.Author.UserName)
+            {
+                ViewBag.Categories = db.Categories.ToList();
+                ViewBag.Tags = new MultiSelectList(db.Tags, "Id", "Name");
+                ViewBag.Authors = db.Users.ToList();
+                return View(post);
+            }
+            this.AddNotification("You are not authorized.", NotificationType.ERROR);
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Posts/Edit/5
@@ -175,16 +200,39 @@ namespace SimpleForum.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Edit([Bind(Include = "Id,Title,Body,Date,Author_Id")] Post post)
+        public ActionResult Edit([Bind(Include = "Id,Title,Body,Date,Description,Category_Id,Author_Id")] Post post, FormCollection form)
         {
-            if (ModelState.IsValid)
+            if (User.IsInRole("Administrators") || User.Identity.Name == post.Author.UserName)
             {
-                db.Entry(post).State = EntityState.Modified;
-                db.SaveChanges();
-                this.AddNotification("Post edited.", NotificationType.INFO);
-                return RedirectToAction("Index");
+                string selectedValues = form["Tags"];
+                int[] id = null;
+                if (selectedValues != null)
+                {
+                    var tags = selectedValues.Split(',');
+                    id = tags.Select(int.Parse).ToArray();
+                }
+                if (ModelState.IsValid)
+                {
+                    var item = db.Entry(post);
+                    item.State = EntityState.Modified;
+                    item.Collection(x => x.Tags).Load();
+                    if (selectedValues != null)
+                    {
+                        post.Tags.Clear();
+                        foreach (var tagid in id)
+                        {
+                            var tag = db.Tags.FirstOrDefault(t => t.Id == tagid);
+                            post.Tags.Add(tag);
+                        }
+                    }
+                    db.SaveChanges();
+                    this.AddNotification("Post edited.", NotificationType.INFO);
+                    return RedirectToAction("Index","Home");
+                }
+                return View(post);
             }
-            return View(post);
+            this.AddNotification("You are not authorized.", NotificationType.ERROR);
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Posts/Delete/5
@@ -194,15 +242,21 @@ namespace SimpleForum.Controllers
             if (id == null)
             {
                 this.AddNotification("Post cant be found.", NotificationType.ERROR);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
-            Post post = db.Posts.Find(id);
+            Post post = db.Posts.Include(p => p.Author).FirstOrDefault(p => p.Id ==id);
             if (post == null)
             {
                 this.AddNotification("Post cant be found.", NotificationType.ERROR);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
-            return View(post);
+            if (User.IsInRole("Administrators") || User.Identity.Name == post.Author.UserName)
+            {
+                return View(post);
+            }
+           
+            this.AddNotification("You are not authorized.", NotificationType.ERROR);
+            return RedirectToAction("Index","Home");
         }
 
         [Authorize]
@@ -211,11 +265,17 @@ namespace SimpleForum.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Post post = db.Posts.Find(id);
-            db.Posts.Remove(post);
-            db.SaveChanges();
-            this.AddNotification("Post deleted.", NotificationType.INFO);
-            return RedirectToAction("Index");
+
+            Post post = db.Posts.Include(p => p.Author).FirstOrDefault(p => p.Id == id);
+            if (User.IsInRole("Administrators") || User.Identity.Name == post.Author.UserName)
+            {
+                db.Posts.Remove(post);
+                db.SaveChanges();
+                this.AddNotification("Post deleted.", NotificationType.INFO);
+                return RedirectToAction("Index","Home");
+            }
+            this.AddNotification("You are not authorized..", NotificationType.ERROR);
+            return RedirectToAction("Index","Home");
         }
 
         protected override void Dispose(bool disposing)

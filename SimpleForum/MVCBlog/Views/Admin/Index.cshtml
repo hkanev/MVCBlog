@@ -1,0 +1,79 @@
+﻿@using SimpleForum.Models
+@model MVCBlog.Models.BlogViewModels
+@{
+    ViewBag.Title = "Admin Panel";
+}
+<h2>Admin Panel</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Count
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
+    <tr>
+        <th>
+            @Html.ActionLink("Categories", "Index", "Category")
+        </th>
+
+        <td>
+            @Model.Categories.Count categories
+        </td>
+        <td>
+            @Html.ActionLink("| Create |", "Create", "Category")
+            @Html.ActionLink("| Details |", "Index", "Category")
+        </td>
+    </tr>
+    <tr>
+        <th>
+            @Html.ActionLink("Posts", "Index", "Posts")
+        </th>
+        <td>
+            @Model.Posts.Count posts
+        </td>
+        <td>
+            @Html.ActionLink("| Create |", "Create", "Posts")
+            @Html.ActionLink("| Details |", "Index", "Posts")
+        </td>
+    </tr>
+    <tr>
+        <th>@Html.ActionLink("Tags", "Index", "Tags")</th>
+        <td>
+            @Model.Tags.Count tags
+        </td>
+        <td>
+            @Html.ActionLink("| Create |", "Create", "Tags")
+            @Html.ActionLink("| Details |", "Index", "Tags")
+        </td>
+        <td>
+
+        </td>
+    </tr>
+    <tr>
+        <th>
+            @Html.ActionLink("Comments", "Index", "Comments")
+        </th>
+        <td>
+            @Model.Comments.Count comments
+        </td>
+        <td>
+            @Html.ActionLink("| Details |", "Index", "Comments")
+        </td>
+    </tr>
+    <tr>
+
+    </tr>
+</table>
+
+
+    
+
+
+    
+

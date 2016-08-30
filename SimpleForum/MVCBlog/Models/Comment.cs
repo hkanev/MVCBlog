@@ -37,11 +37,9 @@ namespace SimpleForum.Models
 
         public virtual ApplicationUser Author { get; set; }
 
-        public virtual ICollection<Post> Posts { get; set; }
+        [ForeignKey("Author")]
+        public virtual string Author_Id { get; set; }
 
-        internal object ToList()
-        {
-            throw new NotImplementedException();
-        }
+        public virtual ICollection<Post> Posts { get; set; }
     }
 }

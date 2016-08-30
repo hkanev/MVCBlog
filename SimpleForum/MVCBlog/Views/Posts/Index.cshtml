@@ -4,54 +4,61 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<h2>Posts</h2>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Author.FullName)
+            Id
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Title)
+            Title
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Description)
+            Author
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Body)
+            Date
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Date)
+            Category
         </th>
-        <th></th>
+        <th>
+            Comments
+        </th>
+        <th>
+            Tags
+        </th>
     </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Author.FullName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Body)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Date)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
-
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.ActionLink(item.Title, "Details", "Posts", new { id = item.Id }, null)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Author.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Category.Name)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Comment.Count)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Tags.Count)
+            </td>
+            <td>
+                @Html.ActionLink("| Create |", "Create", "Posts", new { id = item.Id }, null)
+                @Html.ActionLink("Edit |", "EditPost", "Admin", new { id = item.Id }, null)
+                @Html.ActionLink("Details |", "Details", "Posts", new { id = item.Id }, null)
+                @Html.ActionLink("Delete |", "Delete", "Posts", new { id = item.Id }, null)
+            </td>
+        </tr>
+    }
 </table>
