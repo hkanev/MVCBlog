@@ -1,0 +1,42 @@
+﻿@model IEnumerable<MVCBlog.Models.DataModels.Tag>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Tags</h2>
+<table class="table">
+    <tr>
+        <th>
+            Id
+        </th>
+        <th>
+            Name
+        </th>
+        <th class="text-center">
+            Posts Count
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Posts.Count)
+            </td>
+            <td>
+                @Html.ActionLink("| Create |", "Create", "Tags", new { id = item.Id }, null)
+                @Html.ActionLink("Edit |", "Edit", "Tags", new { id = item.Id }, null)
+                @Html.ActionLink("Delete |", "Delete", "Tags", new { id = item.Id }, null)
+            </td>
+        </tr>
+    }
+</table>

@@ -1,0 +1,138 @@
+﻿@using Microsoft.AspNet.Identity
+@using MVCBlog.Models
+@using PagedList.Mvc;
+@using PagedList;
+@using IPagedList = PagedList.IPagedList
+@model MVCBlog.Models.ViewModels.BlogViewModels
+<hr />
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.ActionLink("New post", "Create", "Posts")</li>
+</ol>
+<hr />
+<section id="blog" class="container-fluid">
+    <div class="blog">
+        <div class="row">
+            <div class="col-md-8">
+                @foreach (var post in ViewBag.onePageOfPosts)
+                {
+                    <div class="blog-item">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-2 text-center">
+                                <div class="entry-meta">
+                                    <span id="publish_date">@post.Date.ToString("dd MMM")</span>
+                                    <span>
+                                        @if (post.Author != null)
+                                        {
+                                            @: <strong>@post.Author.FullName</strong>
+                                    }
+                                        else
+                                        {
+                                            @: <strong>Annonymous</strong>
+                                    }
+                                    </span>
+                                    <span><strong>@post.Comment.Count Comments</strong></span>
+                                    <span><strong>56 Views</strong></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-10 blog-content">
+                                @if (post.PostPicture != null)
+                                {
+                                    <img src="@Url.Action("Photo", "Posts", new {id = post.Id}, null)" width="100%" />
+                                }
+                                <h2>@Html.ActionLink((string)post.Title, "Details", "Posts", new { id = post.Id }, null)</h2>
+                                <h3>@Html.Raw(post.Description)</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--/.blog-item-->
+                }
+                <div class="pager">
+                    @Html.PagedListPager((IPagedList)ViewBag.onePageOfPosts, page => Url.Action("Details", new { page }))
+                </div>
+
+            </div><!--/.col-md-8-->
+
+            <aside class="col-md-4">
+
+                <div class="widget categories">
+                    <h3>Recent Comments</h3>
+                    <div class="row">
+                        <div class="single_comments">
+                            @foreach (var comment in Model.Comments)
+                            {
+                                <div class="col-sm-2">
+                                    @if (comment.Author != null && comment.Author.ProfilePicture != null)
+                                    {
+                                        <img src="@Url.Action("Photo", "Home", new {UserId = comment.Author.Id})" height="60" width="60" class="media-left" />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/Content/avatar3.png" height="60" width="60" />
+                                    }
+                                </div>
+                                <div class="col-sm-10">
+                                    <p>@Utils.CutText(comment.Content, 35)</p>
+                                    <div class="entry-meta small muted">
+                                        <span>
+                                            By
+                                            @if (comment.Author != null)
+                                            {
+                                                @comment.Author.FullName
+                                            }
+                                            else
+                                            {
+                                                @:Anonnymous
+                                                }
+                                        </span>
+                                        <span>
+                                            <p>
+                                                On @Html.ActionLink(Utils.CutText(comment.Post.Title, 30),
+                                                       "Details", "Posts", new { id = comment.Post.Id }, null)
+                                            </p>
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div><!--/.recent comments-->
+
+                <div class="widget categories">
+                    <h3>Categories</h3>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <ul class="blog_category">
+                                @foreach (var category in Model.Categories)
+                                {
+                                    <li>
+                                        @Html.ActionLink(category.Name, "Details", "Category", new { id = category.Id }, null)
+                                        <span class="badge">@category.Posts.Count</span>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div><!--/.categories-->
+
+
+                <div class="widget tags">
+                    <h3>Popular Tags</h3>
+                    <ul class="tag-cloud">
+                        @foreach (var tag in Model.Tags)
+                        {
+                            <li>
+                                @Html.ActionLink(tag.Name, "Details", new { id = tag.Id }, new { @class = "btn btn-xs btn-primary" })
+
+                            </li>
+                        }
+                    </ul>
+                </div><!--/.tags-->
+
+
+            </aside>
+        </div><!--/.row-->
+    </div>
+</section><!--/#blog-->
+<!--/#bottom-->

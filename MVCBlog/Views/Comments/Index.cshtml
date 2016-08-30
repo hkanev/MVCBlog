@@ -1,0 +1,54 @@
+﻿@model IEnumerable<MVCBlog.Models.DataModels.Comment>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Comments</h2>
+<table class="table">
+    <tr class="text-center">
+        <th>
+            Id
+        </th>
+        <th>
+            Content
+        </th>
+        <th>
+            Title
+        </th>
+        <th>
+            Author
+        </th>
+        <th>
+            Date
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Content)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Post.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Author.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td class="text-center">
+                @Html.ActionLink("Edit", "EditComment", "Admin", new { id = item.Id }, null)
+                <br />
+                @Html.ActionLink("Delete", "Delete", "Comments", new { id = item.Id }, null)
+            </td>
+        </tr>
+    }
+</table>

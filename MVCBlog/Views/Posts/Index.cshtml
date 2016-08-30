@@ -1,0 +1,64 @@
+﻿@model IEnumerable<MVCBlog.Models.DataModels.Post>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Posts</h2>
+<table class="table">
+    <tr>
+        <th>
+            Id
+        </th>
+        <th>
+            Title
+        </th>
+        <th>
+            Author
+        </th>
+        <th>
+            Date
+        </th>
+        <th>
+            Category
+        </th>
+        <th>
+            Comments
+        </th>
+        <th>
+            Tags
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.ActionLink(item.Title, "Details", "Posts", new { id = item.Id }, null)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Author.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Category.Name)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Comment.Count)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Tags.Count)
+            </td>
+            <td>
+                @Html.ActionLink("| Create |", "Create", "Posts", new { id = item.Id }, null)
+                @Html.ActionLink("Edit |", "EditPost", "Admin", new { id = item.Id }, null)
+                @Html.ActionLink("Details |", "Details", "Posts", new { id = item.Id }, null)
+                @Html.ActionLink("Delete |", "Delete", "Posts", new { id = item.Id }, null)
+            </td>
+        </tr>
+    }
+</table>
