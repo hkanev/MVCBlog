@@ -251,13 +251,21 @@
     <Content Include="Content\images\blog1.jpg" />
     <Content Include="Content\images\gallery4.png" />
     <Content Include="Content\images\Posts\Giro2016.jpg" />
-    <Content Include="Content\images\Posts\mtb-shreddin--1472210686521-10tgha8wnv9q4-700-80.jpg" />
+    <Content Include="Content\images\Posts\Mtb.jpg" />
     <Content Include="Content\images\Posts\Tour2016.jpg" />
     <Content Include="Content\images\Posts\Vauelta2015.jpg" />
-    <Content Include="Content\images\Users\man2.jpg" />
-    <Content Include="Content\images\Users\man3.jpg" />
-    <Content Include="Content\images\Users\man4.jpg" />
-    <Content Include="Content\images\Users\team-member.jpg" />
+    <Content Include="Content\images\Users\avatar.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\images\Users\avatar1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\images\Users\avatar2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\images\Users\avatar3.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\main.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\prettyPhoto.css" />
@@ -265,6 +273,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="man2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\ai.0.22.19-build00125.js" />
     <Content Include="Scripts\ai.0.22.19-build00125.min.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />

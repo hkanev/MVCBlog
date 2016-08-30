@@ -8,7 +8,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using MVCBlog.Models;
 using MVCBlog.Models.DataModels;
-
+using System.Web;
 namespace MVCBlog.Migrations
 {
     internal sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
@@ -25,18 +25,27 @@ namespace MVCBlog.Migrations
             if (!context.Users.Any())
             {
                 // If the database is empty, populate sample data in it
-                Image man2 = Image.FromFile("F:\\GitHub\\SimpleForum\\SimpleForum\\MVCBlog\\Content\\images\\Users\\man2.jpg");
-                byte[] man2pic = imgToByteArray(man2);
-                Image man3 = Image.FromFile("F:\\GitHub\\SimpleForum\\SimpleForum\\MVCBlog\\Content\\images\\Users\\man3.jpg");
-                byte[] man3pic = imgToByteArray(man3);
-                Image man4 = Image.FromFile("F:\\GitHub\\SimpleForum\\SimpleForum\\MVCBlog\\Content\\images\\Users\\man4.jpg");
-                byte[] man4pic = imgToByteArray(man4);
-                Image girl = Image.FromFile("F:\\GitHub\\SimpleForum\\SimpleForum\\MVCBlog\\Content\\images\\Users\\team-member.jpg");
-                byte[] girlPic = imgToByteArray(girl);
-                CreateUser(context, "admin@gmail.com", "123", "System Administrator", man2pic);
-                CreateUser(context, "pesho@gmail.com", "123", "Peter Ivanov", man4pic);
-                CreateUser(context, "merry@gmail.com", "123", "Maria Petrova", girlPic);
-                CreateUser(context, "geshu@gmail.com", "123", "George Petrov",man3pic);
+
+                var avatarPath = HttpContext.Current.Server.MapPath("~/Content/Images/Users/avatar.jpg");
+                Image avatar = Image.FromFile(avatarPath);
+                byte[] avatarPic = imgToByteArray(avatar);
+
+                var avatarPath1 = HttpContext.Current.Server.MapPath("~/Content/Images/Users/avatar1.jpg");
+                Image avatar1 = Image.FromFile(avatarPath1);
+                byte[] avatar1Pic = imgToByteArray(avatar1);
+
+                var avatarPath2 = HttpContext.Current.Server.MapPath("~/Content/Images/Users/avatar2.jpg");
+                Image avatar2 = Image.FromFile(avatarPath2);
+                byte[] avatar2Pic = imgToByteArray(avatar2);
+
+                var avatarPath3 = HttpContext.Current.Server.MapPath("~/Content/Images/Users/avatar3.jpg");
+                Image avatar3 = Image.FromFile(avatarPath3);
+                byte[] avatar3Pic = imgToByteArray(avatar3);
+
+                CreateUser(context, "admin@gmail.com", "123", "System Administrator", avatarPic);
+                CreateUser(context, "pesho@gmail.com", "123", "Peter Ivanov", avatar2Pic);
+                CreateUser(context, "merry@gmail.com", "123", "Maria Petrova", avatar3Pic);
+                CreateUser(context, "geshu@gmail.com", "123", "George Petrov", avatar1Pic);
 
                 CreateRole(context, "Administrators");
                 AddUserToRole(context, "admin@gmail.com", "Administrators");
@@ -83,7 +92,8 @@ namespace MVCBlog.Migrations
                 var Track = new Category("Track");
                 context.Categories.Add(Track);
 
-                Image tour = Image.FromFile("F:\\GitHub\\SimpleForum\\SimpleForum\\MVCBlog\\Content\\images\\Posts\\Tour2016.jpg");
+                var tourPath= HttpContext.Current.Server.MapPath("~/Content/Images/Posts/Tour2016.jpg");
+                Image tour = Image.FromFile(tourPath);
                 byte[] tourPic = imgToByteArray(tour);
                 CreatePost(context,
                     title: "The Winners of the 2016 Tour de France",
@@ -108,7 +118,8 @@ namespace MVCBlog.Migrations
                     postPicture: tourPic
                 );
 
-                Image giro = Image.FromFile("F:\\GitHub\\SimpleForum\\SimpleForum\\MVCBlog\\Content\\images\\Posts\\Giro2016.jpg");
+                var giroPath = HttpContext.Current.Server.MapPath("~/Content/Images/Posts/Giro2016.jpg");
+                Image giro = Image.FromFile(giroPath);
                 byte[] giroPic = imgToByteArray(giro);
                 CreatePost(context,
                   title: "The Winners of the 2016 Giro",
@@ -141,7 +152,8 @@ namespace MVCBlog.Migrations
                   postPicture: giroPic
               );
 
-                Image vauelta = Image.FromFile("F:\\GitHub\\SimpleForum\\SimpleForum\\MVCBlog\\Content\\images\\Posts\\Vauelta2015.jpg");
+                var vaueltaPath = HttpContext.Current.Server.MapPath("~/Content/Images/Posts/Vauelta2015.jpg");
+                Image vauelta = Image.FromFile(vaueltaPath);
                 byte[] vaueltaPic = imgToByteArray(vauelta);
                 CreatePost(context,
                   title: "The Winners of the 2015 Vauelta",
@@ -170,8 +182,8 @@ namespace MVCBlog.Migrations
                   category: Road,
                   postPicture: vaueltaPic
               );
-
-                Image mtb = Image.FromFile("F:\\GitHub\\SimpleForum\\SimpleForum\\MVCBlog\\Content\\images\\Posts\\mtb-shreddin--1472210686521-10tgha8wnv9q4-700-80.jpg");
+                var mtbPath = HttpContext.Current.Server.MapPath("~/Content/Images/Posts/Mtb.jpg");
+                Image mtb = Image.FromFile(mtbPath);
                 byte[] mtbPic = imgToByteArray(mtb);
                 CreatePost(context,
                   title: "Cycling UK wants to open up more trails to mountain bikers.",
