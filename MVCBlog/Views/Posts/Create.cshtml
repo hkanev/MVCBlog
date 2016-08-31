@@ -1,13 +1,17 @@
 ﻿@using System.Activities.Statements
 @model MVCBlog.Models.DataModels.Post
+
 @{
     ViewBag.Title = "Create";
 }
+<script>  document.querySelector('.editor').style.visibility = 'hidden';</script>
 <h2>Create</h2>
 
 @if (ViewBag.YouSelected != null)
 {
+
     <div> You Selected:  @ViewBag.YouSelected</div>
+
 }
 
 @using (Html.BeginForm()) 
@@ -58,9 +62,8 @@
         <div class="form-group">
         @Html.LabelFor(model => model.Tags, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.ListBox("Tags", ViewBag.Tags as MultiSelectList, new {  @class = "chosen-select",
-           data_placeholder = "Choose  Countries..."})
-</div>
+            @Html.ListBox("Tags", ViewBag.Tags as MultiSelectList, new { @class = "chosen-container form-control" })
+        </div>
     </div>
 
         <div class="form-group">
@@ -75,6 +78,9 @@
     @Html.ActionLink("Back to List", "Index")
 </div>
 
-<script> $(document).bind("pageinit", function () {
-     $(".chzn-select").chosen();
- }); </script> @*Hookup Chosen Plugin*@
+@section Scripts {
+<script type="text/javascript" src="~/Scripts/chosen.jquery.js"></script>
+<script>
+    $(".chosen-container ").chosen()
+</script>
+}

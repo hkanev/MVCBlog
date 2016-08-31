@@ -236,23 +236,6 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Chosen\chosen-sprite%402x.png" />
-    <Content Include="Chosen\chosen-sprite.png" />
-    <Content Include="Chosen\chosen.css" />
-    <Content Include="Chosen\chosen.jquery.js" />
-    <Content Include="Chosen\chosen.jquery.min.js" />
-    <Content Include="Chosen\chosen.min.css" />
-    <Content Include="Chosen\chosen.proto.js" />
-    <Content Include="Chosen\chosen.proto.min.js" />
-    <Content Include="Chosen\docsupport\chosen.png" />
-    <Content Include="Chosen\docsupport\event.simulate.js" />
-    <Content Include="Chosen\docsupport\oss-credit.png" />
-    <Content Include="Chosen\docsupport\prism.css" />
-    <Content Include="Chosen\docsupport\prism.js" />
-    <Content Include="Chosen\docsupport\style.css" />
-    <Content Include="Chosen\index.html" />
-    <Content Include="Chosen\index.proto.html" />
-    <Content Include="Chosen\options.html" />
     <Content Include="Content\animate.min.css" />
     <Content Include="Content\avatar3.png" />
     <Content Include="Content\bootstrap-theme.css" />
@@ -261,6 +244,10 @@
     <Content Include="Content\bootstrap.cerulean.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\chosen-sprite%402x.png" />
+    <Content Include="Content\chosen-sprite.png" />
+    <Content Include="Content\chosen.css" />
+    <Content Include="Content\chosen.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
@@ -290,9 +277,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="man2.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Scripts\ai.0.22.19-build00125.js" />
     <Content Include="Scripts\ai.0.22.19-build00125.min.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
@@ -391,9 +375,11 @@
     <Content Include="Content\fonts\fontawesome-webfont.ttf" />
     <Content Include="Content\fonts\fontawesome-webfont.woff" />
     <Content Include="Content\fonts\FontAwesome.otf" />
-    <Content Include="Chosen\bower.json" />
-    <Content Include="Chosen\package.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\chosen.jquery.js" />
+    <Content Include="Scripts\chosen.jquery.min.js" />
+    <Content Include="Scripts\chosen.proto.js" />
+    <Content Include="Scripts\chosen.proto.min.js" />
     <Content Include="Scripts\html5shiv.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -411,6 +397,7 @@
     <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\prototype.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\tinymce\jquery.tinymce.min.js" />
