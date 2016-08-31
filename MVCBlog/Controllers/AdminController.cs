@@ -90,7 +90,7 @@ namespace MVCBlog.Controllers
                     }
                 }
                 db.SaveChanges();
-                this.AddNotification("Post edited.", NotificationType.INFO);
+                this.AddNotification("Post edited.", NotificationType.INFO);    
                 return RedirectToAction("Index");
             }
             return View(post);

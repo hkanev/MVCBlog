@@ -110,24 +110,20 @@ namespace MVCBlog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Content")] Comment comment,int? id, int? postId)
+        public ActionResult Edit([Bind(Include = "Id,Content")] Comment comment, int? id, int? postId)
         {
             Post post = db.Posts.Find(postId);
-            if (User.IsInRole("Administrators") || User.Identity.Name == comment.Author.UserName)
+
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    comment.PostId = post.Id;
-                    comment.Author_Id = User.Identity.GetUserId();
-                    db.Entry(comment).State = EntityState.Modified;
-                    db.SaveChanges();
-                    this.AddNotification("Comment edited", NotificationType.INFO);
-                    return RedirectToAction("Index","Home");
-                }
-                return View(comment);
+                comment.PostId = post.Id;
+                comment.Author_Id = User.Identity.GetUserId();
+                db.Entry(comment).State = EntityState.Modified;
+                db.SaveChanges();
+                this.AddNotification("Comment edited", NotificationType.INFO);
+                return RedirectToAction("Index", "Home");
             }
-            this.AddNotification("You are not authorized.", NotificationType.ERROR);
-            return RedirectToAction("Index", "Home");
+            return View(comment);
         }
 
         // GET: Comments/Delete/5

@@ -207,8 +207,7 @@ namespace MVCBlog.Controllers
         {
             ViewBag.Categories = db.Categories.ToList();
             ViewBag.Tags = new MultiSelectList(db.Tags, "Id", "Name");
-            if (User.IsInRole("Administrators") || User.Identity.Name == post.Author.UserName)
-            {
+
                 string selectedValues = form["Tags"];
                 int[] id = null;
                 if (selectedValues != null)
@@ -230,14 +229,12 @@ namespace MVCBlog.Controllers
                             post.Tags.Add(tag);
                         }
                     }
+                    post.Author_Id = User.Identity.GetUserId();
                     db.SaveChanges();
                     this.AddNotification("Post edited.", NotificationType.INFO);
                     return RedirectToAction("Index","Home");
                 }
                 return View(post);
-            }
-            this.AddNotification("You are not authorized.", NotificationType.ERROR);
-            return RedirectToAction("Index", "Home");
         }
 
         // GET: Posts/Delete/5
