@@ -14,7 +14,8 @@ using MVCBlog.Models.DataModels;
 using MVCBlog.Models.ViewModels;
 
 namespace MVCBlog.Controllers
-{   
+{
+    [ValidateInput(false)]
     [Authorize(Roles = "Administrators")]
     public class AdminController : Controller
     {
@@ -39,7 +40,7 @@ namespace MVCBlog.Controllers
             if (id == null)
             {
                 this.AddNotification("Post cant be found.", NotificationType.ERROR);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Home");
             }
 
             Post post = db.Posts.Find(id);
@@ -47,7 +48,7 @@ namespace MVCBlog.Controllers
             if (post == null)
             {
                 this.AddNotification("Post cant be found.", NotificationType.ERROR);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Home");
             }
 
             ViewBag.Categories = db.Categories.ToList();
@@ -64,6 +65,9 @@ namespace MVCBlog.Controllers
         [Authorize]
         public ActionResult EditPost([Bind(Include = "Id,Title,Body,Date,Description,Category_Id,Author_Id")] Post post, FormCollection form)
         {
+            ViewBag.Categories = db.Categories.ToList();
+            ViewBag.Tags = new MultiSelectList(db.Tags, "Id", "Name");
+            ViewBag.Authors = db.Users.ToList();
             string selectedValues = form["Tags"];
             int[] id = null;
             if (selectedValues != null)
@@ -97,15 +101,17 @@ namespace MVCBlog.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                this.AddNotification("Comment cant be found.", NotificationType.ERROR);
+                return RedirectToAction("Index", "Home");
             }
             Comment comment = db.Comments.Find(id);
             if (comment == null)
             {
-                return HttpNotFound();
+                this.AddNotification("Comment cant be found.", NotificationType.ERROR);
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.PostId = new SelectList(db.Posts, "Id", "Title", comment.PostId);
-            ViewBag.Author_Id = new SelectList(db.Users, "Id", "FullName", comment.PostId);
+            ViewBag.Authors = db.Users.ToList();
             return View(comment);
         }
 
@@ -116,15 +122,22 @@ namespace MVCBlog.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditComment([Bind(Include = "Id,Content,PostId,Author_Id")] Comment comment)
         {
-            if (ModelState.IsValid)
+            if (User.IsInRole("Administrators") || User.Identity.Name == comment.Author.UserName)
             {
-                db.Entry(comment).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+
+                    db.Entry(comment).State = EntityState.Modified;
+                    db.SaveChanges();
+                    this.AddNotification("Comment edited", NotificationType.INFO);
+                    return RedirectToAction("Index", "Home");
+                }
+                ViewBag.PostId = new SelectList(db.Posts, "Id", "Title", comment.PostId);
+                ViewBag.Authors = db.Users.ToList();
+                return View(comment);
             }
-            ViewBag.PostId = new SelectList(db.Posts, "Id", "Title", comment.PostId);
-            ViewBag.Author_Id = new SelectList(db.ApplicationUsers, "Id", "FullName", comment.PostId);
-            return View(comment);
+            this.AddNotification("You are not authorized.", NotificationType.ERROR);
+            return RedirectToAction("Index", "Home");
         }
 
     }

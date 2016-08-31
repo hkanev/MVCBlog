@@ -37,7 +37,7 @@ namespace MVCBlog.Controllers
             var post = db.Posts.Include(p => p.Author).FirstOrDefault(p => p.Id == id);
             postViewModel.Post = post;
             var comments =
-                db.Comments.Include(c => c.Post).Where(c => c.PostId == postViewModel.Post.Id).ToList();
+                db.Comments.Include(c => c.Post).Where(c => c.PostId == postViewModel.Post.Id).OrderByDescending(c => c.Date).ToList();
             postViewModel.Comments = comments;
             var commentsAside =
                 db.Comments.ToList().OrderByDescending(t => t.Date).Take(5).ToList();
@@ -191,7 +191,6 @@ namespace MVCBlog.Controllers
             {
                 ViewBag.Categories = db.Categories.ToList();
                 ViewBag.Tags = new MultiSelectList(db.Tags, "Id", "Name");
-                ViewBag.Authors = db.Users.ToList();
                 return View(post);
             }
             this.AddNotification("You are not authorized.", NotificationType.ERROR);
@@ -204,8 +203,10 @@ namespace MVCBlog.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Edit([Bind(Include = "Id,Title,Body,Date,Description,Category_Id,Author_Id")] Post post, FormCollection form)
+        public ActionResult Edit([Bind(Include = "Id,Title,Body,Description,Category_Id,")] Post post, FormCollection form)
         {
+            ViewBag.Categories = db.Categories.ToList();
+            ViewBag.Tags = new MultiSelectList(db.Tags, "Id", "Name");
             if (User.IsInRole("Administrators") || User.Identity.Name == post.Author.UserName)
             {
                 string selectedValues = form["Tags"];
@@ -273,6 +274,8 @@ namespace MVCBlog.Controllers
             Post post = db.Posts.Include(p => p.Author).FirstOrDefault(p => p.Id == id);
             if (User.IsInRole("Administrators") || User.Identity.Name == post.Author.UserName)
             {
+                post.Comment.Clear();
+                post.Tags.Clear();
                 db.Posts.Remove(post);
                 db.SaveChanges();
                 this.AddNotification("Post deleted.", NotificationType.INFO);

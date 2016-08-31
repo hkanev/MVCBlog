@@ -2713,6 +2713,7 @@ select[multiple].input-lg {
 }
 .btn {
   display: inline-block;
+  margin-top: 20px;
   margin-bottom: 0;
   font-weight: normal;
   text-align: center;
@@ -4286,7 +4287,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
   display: inline-block;
 }
 .breadcrumb > li + li:before {
-  content: "/\00a0";
+  content: " ";
   padding: 0 5px;
   color: #cccccc;
 }

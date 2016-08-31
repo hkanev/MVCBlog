@@ -54,10 +54,10 @@
                 @Html.DisplayFor(modelItem => item.Tags.Count)
             </td>
             <td>
-                @Html.ActionLink("| Create |", "Create", "Posts", new { id = item.Id }, null)
+                @Html.ActionLink("Create |", "Create", "Posts", new { id = item.Id }, null)
                 @Html.ActionLink("Edit |", "EditPost", "Admin", new { id = item.Id }, null)
                 @Html.ActionLink("Details |", "Details", "Posts", new { id = item.Id }, null)
-                @Html.ActionLink("Delete |", "Delete", "Posts", new { id = item.Id }, null)
+                @Html.ActionLink("Delete", "Delete", "Posts", new { id = item.Id }, null)
             </td>
         </tr>
     }

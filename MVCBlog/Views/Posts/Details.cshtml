@@ -10,9 +10,9 @@
     <li>@Html.ActionLink("New post", "Create", "Posts")</li>
     @if (User.IsInRole("Administrators") || User.Identity.Name == Model.Post.Author.UserName)
     {
-        <li>@Html.ActionLink("ChangePicture", "SetPicture", "Posts", new { id = Model.Post.Id }, null)</li>
-        <li>@Html.ActionLink("Edit", "Edit", "Posts", new { id = Model.Post.Id }, null)</li>
-        <li>@Html.ActionLink("Delete", "Delete", "Posts", new { id = Model.Post.Id }, null)</li>
+        <li class="pull-right">@Html.ActionLink("Delete", "Delete", "Posts", new {id = Model.Post.Id}, null)</li>
+        <li class="pull-right">@Html.ActionLink("Set Picture", "SetPicture", "Posts", new { id = Model.Post.Id }, null)</li>
+        <li class="pull-right">@Html.ActionLink("Edit", "Edit", "Posts", new { id = Model.Post.Id }, null)</li>  
     }
 </ol>
 <hr />
@@ -64,13 +64,21 @@
                         <div class="pull-left post_comments">
                             @if (comment.Author != null && comment.Author.ProfilePicture != null)
                             {
-                                <img src="@Url.Action("Photo", "Home", new {UserId = comment.Author.Id})" height="60" width="60" class="media-left" />
+                                <img src="@Url.Action("Photo", "Home", new {UserId = comment.Author.Id})" height="60" width="60" class="media-left"/>
                             }
                             else
                             {
-                                <img src="~/Content/avatar3.png" height="60" width="60" />
+                                <img src="~/Content/avatar3.png" height="60" width="60"/>
                             }
                         </div>
+                        
+                            @if (User.IsInRole("Administrators") || User.Identity.Name == Model.Post.Author.UserName)
+                                 {
+                                     <span>@Html.ActionLink("| Edit |", "Edit", "Comments", new { id = comment.Id, postId = Model.Post.Id}, null)</span>
+                                     <span>@Html.ActionLink(" Delete |", "Delete", "Comments", new { id = comment.Id }, null)</span> 
+                                 }
+                        
+                           
                         <div class="media-body post_reply_comments">
                             <h3>
                                 @if (Model.Post.Author != null)

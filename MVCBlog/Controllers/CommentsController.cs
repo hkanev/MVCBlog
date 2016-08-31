@@ -1,6 +1,7 @@
 ﻿using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using MVCBlog.Extensions;
 using MVCBlog.Models;
 using MVCBlog.Models.DataModels;
@@ -98,7 +99,6 @@ namespace MVCBlog.Controllers
             }
             if (User.IsInRole("Administrators") || User.Identity.Name == comment.Author.UserName)
             {
-                ViewBag.PostId = new SelectList(db.Posts, "Id", "Title", comment.PostId);
                 return View(comment);
             }
             this.AddNotification("You are not authorized.", NotificationType.ERROR);
@@ -110,19 +110,20 @@ namespace MVCBlog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Content,PostId")] Comment comment)
+        public ActionResult Edit([Bind(Include = "Id,Content")] Comment comment,int? id, int? postId)
         {
+            Post post = db.Posts.Find(postId);
             if (User.IsInRole("Administrators") || User.Identity.Name == comment.Author.UserName)
             {
                 if (ModelState.IsValid)
                 {
-
+                    comment.PostId = post.Id;
+                    comment.Author_Id = User.Identity.GetUserId();
                     db.Entry(comment).State = EntityState.Modified;
                     db.SaveChanges();
                     this.AddNotification("Comment edited", NotificationType.INFO);
                     return RedirectToAction("Index","Home");
                 }
-                ViewBag.PostId = new SelectList(db.Posts, "Id", "Title", comment.PostId);
                 return View(comment);
             }
             this.AddNotification("You are not authorized.", NotificationType.ERROR);
