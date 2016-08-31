@@ -236,6 +236,23 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Chosen\chosen-sprite%402x.png" />
+    <Content Include="Chosen\chosen-sprite.png" />
+    <Content Include="Chosen\chosen.css" />
+    <Content Include="Chosen\chosen.jquery.js" />
+    <Content Include="Chosen\chosen.jquery.min.js" />
+    <Content Include="Chosen\chosen.min.css" />
+    <Content Include="Chosen\chosen.proto.js" />
+    <Content Include="Chosen\chosen.proto.min.js" />
+    <Content Include="Chosen\docsupport\chosen.png" />
+    <Content Include="Chosen\docsupport\event.simulate.js" />
+    <Content Include="Chosen\docsupport\oss-credit.png" />
+    <Content Include="Chosen\docsupport\prism.css" />
+    <Content Include="Chosen\docsupport\prism.js" />
+    <Content Include="Chosen\docsupport\style.css" />
+    <Content Include="Chosen\index.html" />
+    <Content Include="Chosen\index.proto.html" />
+    <Content Include="Chosen\options.html" />
     <Content Include="Content\animate.min.css" />
     <Content Include="Content\avatar3.png" />
     <Content Include="Content\bootstrap-theme.css" />
@@ -374,6 +391,8 @@
     <Content Include="Content\fonts\fontawesome-webfont.ttf" />
     <Content Include="Content\fonts\fontawesome-webfont.woff" />
     <Content Include="Content\fonts\FontAwesome.otf" />
+    <Content Include="Chosen\bower.json" />
+    <Content Include="Chosen\package.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\html5shiv.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

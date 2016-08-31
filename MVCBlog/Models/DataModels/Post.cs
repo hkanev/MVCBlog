@@ -45,6 +45,8 @@ namespace MVCBlog.Models.DataModels
 
         public byte[] PostPicture { get; set; }
 
+        public int Views { get; set; }
+
         public virtual ICollection<Tag> Tags { get; set; }
 
         public virtual ICollection<Comment> Comment { get; set; }

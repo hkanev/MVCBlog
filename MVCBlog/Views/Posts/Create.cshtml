@@ -1,17 +1,13 @@
 ﻿@using System.Activities.Statements
 @model MVCBlog.Models.DataModels.Post
-
 @{
     ViewBag.Title = "Create";
 }
-<script>  document.querySelector('.editor').style.visibility = 'hidden';</script>
 <h2>Create</h2>
 
 @if (ViewBag.YouSelected != null)
 {
-
     <div> You Selected:  @ViewBag.YouSelected</div>
-
 }
 
 @using (Html.BeginForm()) 
@@ -62,8 +58,9 @@
         <div class="form-group">
         @Html.LabelFor(model => model.Tags, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.ListBox("Tags", ViewBag.Tags as MultiSelectList)
-        </div>
+            @Html.ListBox("Tags", ViewBag.Tags as MultiSelectList, new {  @class = "chosen-select",
+           data_placeholder = "Choose  Countries..."})
+</div>
     </div>
 
         <div class="form-group">
@@ -78,17 +75,6 @@
     @Html.ActionLink("Back to List", "Index")
 </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-    <script>
-        tinyMCE.init({
-            editor_selector: "editor",
-            setup: function (ed) {
-                ed.onInit.add(function (ed, evt) {
-                    //show the element again now that the editor is loaded.
-                    document.querySelector('.editor').style.visibility = 'visible';
-                });
-            }
-        });
-    </script>
-}
+<script> $(document).bind("pageinit", function () {
+     $(".chzn-select").chosen();
+ }); </script> @*Hookup Chosen Plugin*@

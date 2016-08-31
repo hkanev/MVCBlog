@@ -24,11 +24,11 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-2 text-center">
                             <div class="entry-meta">
-                                <span id="publish_date">@Model.Post.Date.ToString("dd MMM")</span>
+                                <span id="publish_date"><strong>@Model.Post.Date.ToString("dd MMM")</strong></span>
                                 <span>
                                     @if (Model.Post.Author != null)
                                     {
-                                        @: @Model.Post.Author.FullName
+                                        @: <strong>@Model.Post.Author.FullName</strong>
                                         }
                                     else
                                     {
@@ -36,7 +36,7 @@
                                         }
                                 </span>
                                 <span>@Model.Post.Comment.Count Comments</span>
-                                <span>56 Views</span>
+                                <span><strong>@Model.Post.Views views</strong></span>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-10 blog-content">

@@ -34,7 +34,8 @@ namespace MVCBlog.Controllers
                 return RedirectToAction("Index","Home");
             }
             var postViewModel = new PostViewModel();
-            postViewModel.Post = db.Posts.Include(p => p.Author).FirstOrDefault(p => p.Id == id);
+            var post = db.Posts.Include(p => p.Author).FirstOrDefault(p => p.Id == id);
+            postViewModel.Post = post;
             var comments =
                 db.Comments.Include(c => c.Post).Where(c => c.PostId == postViewModel.Post.Id).ToList();
             postViewModel.Comments = comments;
@@ -45,6 +46,12 @@ namespace MVCBlog.Controllers
             postViewModel.Categories = categories;
             var tags = db.Tags.OrderByDescending(t => t.Posts.Count).Take(9).ToList();
             postViewModel.Tags = tags;
+
+            if (ModelState.IsValid)
+            {
+                post.Views = post.Views + 1;
+                db.SaveChanges();
+            }
 
             if (postViewModel.Post == null)
             {
@@ -153,6 +160,7 @@ namespace MVCBlog.Controllers
                 }
                 post.Author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
                 post.Author_Id = User.Identity.GetUserId();
+                post.Views = 0;
                 db.Posts.Add(post);
                 db.SaveChanges();
                 this.AddNotification("Post created", NotificationType.INFO);
